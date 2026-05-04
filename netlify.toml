@@ -1,11 +1,7 @@
-[[plugins]]
-  package = "@netlify/plugin-nextjs"
-
 [build]
   command = "npm run build"
   publish = ".next"
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
+Ctrl + D
+git add .
+git commit -m "Fix netlify config"
+git push
