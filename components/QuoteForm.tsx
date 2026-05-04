@@ -110,9 +110,12 @@ export default function QuoteForm() {
 
     try {
       const formData = new FormData(e.currentTarget)
-      files.forEach((file) => formData.append('files', file))
+      files.forEach((file) => formData.append('files[]', file))
+      formData.append('access_key', '5511d17a-ade7-46d0-b0c8-0ec649417aff')
+      formData.append('subject', `Neue Anfrage: ${form.service} – ${form.name}`)
+      formData.append('from_name', 'BARKS Folierung Website')
 
-      const response = await fetch('/', {
+      const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
         body: formData,
       })
@@ -152,18 +155,9 @@ export default function QuoteForm() {
 
   return (
     <form
-      name="anfrage"
-      method="POST"
-      encType="multipart/form-data"
-      data-netlify="true"
-      data-netlify-honeypot="bot-field"
       onSubmit={handleSubmit}
       className="bg-surface border border-border rounded-sm p-8 space-y-5"
     >
-      <input type="hidden" name="form-name" value="anfrage" />
-      <p className="hidden">
-        <label>Don't fill this out: <input name="bot-field" onChange={handleChange} /></label>
-      </p>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         <div>
