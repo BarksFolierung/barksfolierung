@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <body>
+    <form
+      name="anfrage"
+      netlify
+      netlify-honeypot="bot-field"
+      enctype="multipart/form-data"
+      hidden
+    >
+      <input type="hidden" name="form-name" value="anfrage" />
+      <input name="bot-field" />
+      <input name="name" type="text" />
+      <input name="email" type="email" />
+      <input name="phone" type="tel" />
+      <select name="service"></select>
+      <textarea name="message"></textarea>
+      <input name="files" type="file" multiple />
+    </form>
+  </body>
+</html>
+cd /c/Users/alisa/Desktop/barksfolierung && git add . && git commit -m "Add Netlify forms migration file" && git push
