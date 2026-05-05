@@ -83,8 +83,10 @@ export const portfolioItems: PortfolioItem[] = [
     image: '/portfolio/belvedere.jpg',
     images: [
       '/portfolio/belvedere.jpg',
+      '/portfolio/belvedere1.jpg',
       '/portfolio/belvedere2.jpg',
       '/portfolio/belvedere3.jpg',
+      '/portfolio/belvedere4.jpg',
     ],
     description:
       'LED-Leuchtschild für das Ristorante Belvedere – modernes Design mit hoher Lichtstärke für einen eleganten Außenauftritt.',
@@ -95,8 +97,9 @@ export const portfolioItems: PortfolioItem[] = [
     title: 'Antico Außenschild 3D-Buchstaben',
     category: 'Beschriftung',
     client: 'Restaurant Antico',
-    image: '/portfolio/antico1.jpg',
+    image: '/portfolio/antico0.jpg',
     images: [
+      '/portfolio/antico0.jpg',
       '/portfolio/antico1.jpg',
       '/portfolio/antico2.jpg',
       '/portfolio/antico3.jpg',
@@ -112,7 +115,7 @@ export const portfolioItems: PortfolioItem[] = [
     category: 'Leuchtreklame',
     client: 'Restaurant Morea',
     image: '/portfolio/morea1.jpg',
-    images: ['/portfolio/morea1.jpg', '/portfolio/morea2.jpg'],
+    images: ['/portfolio/morea1.jpg', '/portfolio/morea2.jpg', '/portfolio/morea3.jpg'],
     description:
       'Leuchtkasten mit integriertem 3D-Logo für das Restaurant Morea – markante Außenwerbung mit hohem Wiedererkennungswert.',
     tags: ['Leuchtkasten', '3D-Logo'],
@@ -176,8 +179,14 @@ export const portfolioItems: PortfolioItem[] = [
     title: 'Feuerwehr Altona Großformatdruck',
     category: 'Digitaldruck',
     client: 'Freiwillige Feuerwehr Altona',
-    image: '/portfolio/feuerwehr-altona.jpg',
-    images: ['/portfolio/feuerwehr-altona.jpg', '/portfolio/feuerwehr-altona2.jpg'],
+    image: '/portfolio/feuerwehr-altona 0.jpg',
+    images: [
+      '/portfolio/feuerwehr-altona 0.jpg',
+      '/portfolio/feuerwehr-altona 1.jpg',
+      '/portfolio/feuerwehr-altona 2.jpg',
+      '/portfolio/feuerwehr-altona 4.jpg',
+      '/portfolio/feuerwehr-altona 5.jpg',
+    ],
     description:
       'Großformatiger Digitaldruck als Aufkleber für die Freiwillige Feuerwehr Altona – präzise Farben, wetterfeste Materialien.',
     tags: ['Großformat', 'Digitaldruck', 'Aufkleber'],
@@ -214,5 +223,149 @@ export const portfolioItems: PortfolioItem[] = [
     description:
       'Sichtschutzfolierung auf Glastrennwänden in einem Hamburger Büroprojekt – funktional, modern und ansprechend gestaltet.',
     tags: ['Glasdekor', 'Trennwand', 'Sichtschutz'],
+  },
+  {
+    id: '15',
+    title: 'Große Freiheit Außenwerbung',
+    category: 'Leuchtreklame',
+    client: 'Große Freiheit Hamburg',
+    image: '/portfolio/Große Freiheit1.jpg',
+    images: [
+      '/portfolio/Große Freiheit1.jpg',
+      '/portfolio/Große Freiheit2.jpg',
+      '/portfolio/Große Freiheit3.jpg',
+      '/portfolio/Große Freiheit4.jpg',
+    ],
+    description:
+      'Leuchtreklame und Außenwerbung für einen Betrieb auf der Großen Freiheit in Hamburg – auffälliges Design für maximale Sichtbarkeit im belebten Kiez.',
+    tags: ['Leuchtreklame', 'Außenwerbung', 'Hamburg'],
+  },
+  {
+    id: '16',
+    title: 'GoldenCut Nightclub Beschilderung',
+    category: 'Leuchtreklame',
+    client: 'GoldenCut Nightclub',
+    image: '/portfolio/GoldenCut Nightclub1.jpg',
+    images: [
+      '/portfolio/GoldenCut Nightclub1.jpg',
+      '/portfolio/GoldenCut Nightclub2.jpg',
+      '/portfolio/GoldenCut Nightclub3.jpg',
+    ],
+    description:
+      'Hochwertige Leuchtreklame und Eingangsbeschilderung für den GoldenCut Nightclub – markantes Erscheinungsbild für eine starke Präsenz in der Nacht.',
+    tags: ['Nightclub', 'Leuchtreklame', 'Neon'],
+  },
+  {
+    id: '17',
+    title: 'Luxury Beauty Salon Beschriftung',
+    category: 'Beschriftung',
+    client: 'Luxury Beauty Salon',
+    image: '/portfolio/Luxury Beauty Salon.jpg',
+    images: [
+      '/portfolio/Luxury Beauty Salon.jpg',
+      '/portfolio/Luxury Beauty Salon 2.jpg',
+      '/portfolio/Luxury Beauty Salon3.jpg',
+    ],
+    description:
+      'Elegante Außenbeschriftung und Schaufenstergestaltung für einen Luxury Beauty Salon – edles Design, das die Hochwertigkeit der Marke widerspiegelt.',
+    tags: ['Beschriftung', 'Schaufenster', 'Beauty'],
+  },
+  {
+    id: '18',
+    title: 'Bodrum Caffe & Bar Leuchtreklame',
+    category: 'Leuchtreklame',
+    client: 'Bodrum Caffe & Bar',
+    image: '/portfolio/Bodrum caffe & bar.jpg',
+    images: [
+      '/portfolio/Bodrum caffe & bar.jpg',
+      '/portfolio/Bodrum caffe & bar 2.jpg',
+    ],
+    description:
+      'Leuchtende Außenwerbung für das Bodrum Caffe & Bar – stilvolle Reklame, die Gäste bei Tag und Nacht anspricht.',
+    tags: ['Leuchtkasten', 'Bar', 'Außenwerbung'],
+  },
+  {
+    id: '19',
+    title: 'LaserRoom Innenraumgestaltung',
+    category: 'Innenraumgestaltung',
+    client: 'LaserRoom',
+    image: '/portfolio/LaserRoom0.jpg',
+    images: [
+      '/portfolio/LaserRoom0.jpg',
+      '/portfolio/LaserRoom1.jpg',
+      '/portfolio/LaserRoom 1.jpg',
+      '/portfolio/LaserRoom 2 photoshop.jpg',
+      '/portfolio/LaserRoom 3.jpg',
+    ],
+    description:
+      'Komplette Innenraumgestaltung für den LaserRoom – intensive Wandfolierung und Grafikdesign für ein einzigartiges Ambiente.',
+    tags: ['Innenraum', 'Wandfolie', 'Design'],
+  },
+  {
+    id: '20',
+    title: "Shooter's Disco Außenwerbung",
+    category: 'Leuchtreklame',
+    client: "Shooter's Disco",
+    image: "/portfolio/Shooter's Disco.jpg",
+    images: ["/portfolio/Shooter's Disco.jpg"],
+    description:
+      "Auffällige Außenwerbung für Shooter's Disco – prägnantes Schild mit starker Fernwirkung für den Nachtbetrieb.",
+    tags: ['Disco', 'Leuchtreklame', 'Nacht'],
+  },
+  {
+    id: '21',
+    title: 'RiverSide Hotel Hamburg',
+    category: 'Beschriftung',
+    client: 'RiverSide Hotel Hamburg',
+    image: '/portfolio/RiverSide Hotel Hamburg.jpg',
+    images: [
+      '/portfolio/RiverSide Hotel Hamburg.jpg',
+      '/portfolio/RiverSide Hotel Hamburg2.jpg',
+    ],
+    description:
+      'Professionelle Außenbeschriftung und Beschilderung für das RiverSide Hotel Hamburg – hochwertiges Erscheinungsbild für einen starken ersten Eindruck.',
+    tags: ['Hotel', 'Beschriftung', 'Außenwerbung'],
+  },
+  {
+    id: '22',
+    title: 'Empire Riverside Hotel Beschilderung',
+    category: 'Beschriftung',
+    client: 'Empire Riverside Hotel',
+    image: '/portfolio/Empire Riverside Hotel.jpg',
+    images: [
+      '/portfolio/Empire Riverside Hotel.jpg',
+      '/portfolio/Empire Riverside Hotel2.jpg',
+      '/portfolio/Empire Riverside Hote 2.jpg',
+      '/portfolio/Empire Riverside Hotel4.jpg',
+    ],
+    description:
+      'Hochwertige Hotelbeschilderung und Außenbeschriftung für das Empire Riverside Hotel – elegantes Design, das dem Renommee des Hauses entspricht.',
+    tags: ['Hotel', 'Beschriftung', 'Premium'],
+  },
+  {
+    id: '23',
+    title: 'BO Hotel Sonnenschutzfolierung',
+    category: 'Fensterfolierung',
+    client: 'BO Hotel',
+    image: '/portfolio/BO Hotel Sonneschutz.jpg',
+    images: [
+      '/portfolio/BO Hotel Sonneschutz.jpg',
+      '/portfolio/BO Hotel Sonneschutz1.jpg',
+      '/portfolio/BO Hotel Sonneschutz2.jpg',
+    ],
+    description:
+      'Sonnenschutzfolierung für großflächige Hotelfenster im BO Hotel – effektiver Schutz vor Hitze und Blendung bei klarem, modernem Look.',
+    tags: ['Sonnenschutz', 'Hotel', 'Fensterfolie'],
+  },
+  {
+    id: '24',
+    title: 'Möbel Folierung',
+    category: 'Innenraumgestaltung',
+    client: 'Privatkunde',
+    image: '/portfolio/Mobel Folie.jpg',
+    images: ['/portfolio/Mobel Folie.jpg', '/portfolio/Mobel Folie2.jpg'],
+    description:
+      'Individuelle Möbelfolierung für Privatkunden – Küchen, Schränke und Oberflächen in neuem Look ohne teure Neuanschaffung.',
+    tags: ['Möbel', 'Folie', 'Innenraum'],
   },
 ]
