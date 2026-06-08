@@ -556,6 +556,14 @@ function fmtPrice(p: number): string {
     : Math.round(p) + ' €'
 }
 
+function fmtBrutto(p: number): string {
+  return fmtPrice(p * 1.19)
+}
+
+function fmtMwSt(p: number): string {
+  return fmtPrice(p * 0.19)
+}
+
 // ─── Component ────────────────────────────────────────────────────────────────
 export default function ShopClient() {
   const [filter,     setFilter]     = useState('all')
@@ -631,9 +639,11 @@ export default function ShopClient() {
               </ul>
               <div className="flex items-end justify-between">
                 <div>
-                  <div className="text-[10px] uppercase tracking-widest text-muted">ab</div>
+                  <div className="text-[10px] uppercase tracking-widest text-muted">ab (netto)</div>
                   <div className="text-2xl font-black">{fmtPrice(prod.basePrice)}</div>
-                  <div className="text-[10px] text-muted">zzgl. MwSt.</div>
+                  <div className="text-[10px] text-white/60">
+                    inkl. 19% MwSt. <span className="text-white font-bold">{fmtBrutto(prod.basePrice)}</span>
+                  </div>
                 </div>
                 <span className="text-xs font-bold uppercase tracking-wider text-accent opacity-0 group-hover:opacity-100 transition-opacity">
                   Konfigurieren →
@@ -729,9 +739,17 @@ export default function ShopClient() {
                         </div>
                       )
                     })}
-                    <div className="flex justify-between items-center pt-2">
-                      <span className="text-sm text-muted">Richtpreis ab</span>
-                      <span className="text-2xl font-black text-accent">{fmtPrice(price)}</span>
+                    <div className="flex justify-between items-center pt-2 border-t border-border">
+                      <span className="text-sm text-muted">Netto</span>
+                      <span className="text-sm font-medium">{fmtPrice(price)}</span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-muted">+ 19% MwSt.</span>
+                      <span className="text-sm font-medium">{fmtMwSt(price)}</span>
+                    </div>
+                    <div className="flex justify-between items-center pt-1 border-t border-border">
+                      <span className="text-sm font-bold">Gesamt (brutto)</span>
+                      <span className="text-2xl font-black text-accent">{fmtBrutto(price)}</span>
                     </div>
                   </div>
                   <form onSubmit={e => { e.preventDefault(); setDone(true) }} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -775,9 +793,11 @@ export default function ShopClient() {
             {!done && (
               <div className="flex items-center justify-between p-5 border-t border-border bg-background flex-wrap gap-3">
                 <div>
-                  <div className="text-[10px] uppercase tracking-widest text-muted mb-1">Richtpreis ab</div>
-                  <div className="text-3xl font-black text-accent leading-none">{fmtPrice(price)}</div>
-                  <div className="text-[10px] text-muted mt-0.5">zzgl. MwSt. · inkl. Druck</div>
+                  <div className="text-[10px] uppercase tracking-widest text-muted mb-1">Richtpreis</div>
+                  <div className="text-[11px] text-muted">Netto: {fmtPrice(price)}</div>
+                  <div className="text-[11px] text-muted">+ 19% MwSt.: {fmtMwSt(price)}</div>
+                  <div className="text-2xl font-black text-accent leading-tight mt-0.5">{fmtBrutto(price)}</div>
+                  <div className="text-[10px] text-muted">Brutto (inkl. MwSt.)</div>
                 </div>
                 <div className="flex gap-2">
                   {step > 0 && (
