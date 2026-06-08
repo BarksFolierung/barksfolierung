@@ -557,11 +557,11 @@ function fmtPrice(p: number): string {
 }
 
 function fmtBrutto(p: number): string {
-  return fmtPrice(p * 1.08)
+  return fmtPrice(p * 1.19)
 }
 
 function fmtMwSt(p: number): string {
-  return fmtPrice(p * 0.08)
+  return fmtPrice(p * 0.19)
 }
 
 // ─── Component ────────────────────────────────────────────────────────────────
@@ -642,7 +642,7 @@ export default function ShopClient() {
                   <div className="text-[10px] uppercase tracking-widest text-muted">ab (netto)</div>
                   <div className="text-2xl font-black">{fmtPrice(prod.basePrice)}</div>
                   <div className="text-[10px] text-white/60">
-                    inkl. 8% MwSt. <span className="text-white font-bold">{fmtBrutto(prod.basePrice)}</span>
+                    inkl. 19% MwSt. <span className="text-white font-bold">{fmtBrutto(prod.basePrice)}</span>
                   </div>
                 </div>
                 <span className="text-xs font-bold uppercase tracking-wider text-accent opacity-0 group-hover:opacity-100 transition-opacity">
@@ -744,7 +744,7 @@ export default function ShopClient() {
                       <span className="text-sm font-medium">{fmtPrice(price)}</span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-sm text-muted">+ 8% MwSt.</span>
+                      <span className="text-sm text-muted">+ 19% MwSt.</span>
                       <span className="text-sm font-medium">{fmtMwSt(price)}</span>
                     </div>
                     <div className="flex justify-between items-center pt-1 border-t border-border">
@@ -795,7 +795,7 @@ export default function ShopClient() {
                 <div>
                   <div className="text-[10px] uppercase tracking-widest text-muted mb-1">Richtpreis</div>
                   <div className="text-[11px] text-muted">Netto: {fmtPrice(price)}</div>
-                  <div className="text-[11px] text-muted">+ 8% MwSt.: {fmtMwSt(price)}</div>
+                  <div className="text-[11px] text-muted">+ 19% MwSt.: {fmtMwSt(price)}</div>
                   <div className="text-2xl font-black text-accent leading-tight mt-0.5">{fmtBrutto(price)}</div>
                   <div className="text-[10px] text-muted">Brutto (inkl. MwSt.)</div>
                 </div>
