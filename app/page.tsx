@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import Hero from '@/components/Hero'
+import ShopCarousel from '@/components/ShopCarousel'
 import ServicesSection from '@/components/ServicesSection'
 import PortfolioGrid from '@/components/PortfolioGrid'
 import PriceCalculator from '@/components/PriceCalculator'
@@ -8,6 +9,8 @@ export default function HomePage() {
   return (
     <>
       <Hero />
+
+      <ShopCarousel />
 
       <ServicesSection />
 
