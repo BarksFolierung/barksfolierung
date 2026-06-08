@@ -3,7 +3,6 @@
 import { useState } from 'react'
 import { X, ChevronRight, ChevronLeft } from 'lucide-react'
 
-// ─── Types ─────────────────────────────────────────────────────────────────────
 type Opt     = { id: string; label: string; sub: string; p: number }
 type PStep   = { key: string; opts: Opt[] }
 type Product = {
@@ -23,565 +22,521 @@ const CATS = [
 const STEP_TITLES = ['Format & Größe wählen', 'Menge wählen', 'Material & Veredelung']
 const STEP_LABELS = ['Format / Größe', 'Menge', 'Material']
 
-// Unsplash image helper
-const img = (id: string) =>
-  `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=800&q=80`
-
-// ─── Product Catalogue ────────────────────────────────────────────────────────
+// ─── Products with realistic German resale prices ─────────────────────────────
 const PRODUCTS: Product[] = [
-  // ── PRINT ──
+
+  // ── PRINT ──────────────────────────────────────────────────────────────────
   {
-    id: 'flyer', cat: 'print',
-    image: '/products/flyer.png',
-    name: 'Flyer',
+    id: 'flyer', cat: 'print', image: '/products/flyer.png', name: 'Flyer',
     specs: ['DIN A6 bis DIN A4', 'Offset- & Digitaldruck', '135g – 350g Papier', 'ab 100 Stück'],
-    basePrice: 19,
+    basePrice: 49,
     steps: [
       { key: 'format', opts: [
         { id: 'a6',   label: 'DIN A6',   sub: '105 × 148 mm', p: 0  },
-        { id: 'lang', label: 'DIN lang', sub: '99 × 210 mm',  p: 5  },
-        { id: 'a5',   label: 'DIN A5',   sub: '148 × 210 mm', p: 8  },
-        { id: 'a4',   label: 'DIN A4',   sub: '210 × 297 mm', p: 18 },
+        { id: 'lang', label: 'DIN lang', sub: '99 × 210 mm',  p: 15 },
+        { id: 'a5',   label: 'DIN A5',   sub: '148 × 210 mm', p: 25 },
+        { id: 'a4',   label: 'DIN A4',   sub: '210 × 297 mm', p: 45 },
       ]},
       { key: 'qty', opts: [
         { id: '100',  label: '100 Stk.',   sub: '',           p: 0   },
-        { id: '250',  label: '250 Stk.',   sub: '',           p: 12  },
-        { id: '500',  label: '500 Stk.',   sub: 'Bestseller', p: 22  },
-        { id: '1000', label: '1.000 Stk.', sub: '',           p: 35  },
-        { id: '2500', label: '2.500 Stk.', sub: '',           p: 65  },
-        { id: '5000', label: '5.000 Stk.', sub: 'Vorteil',    p: 100 },
+        { id: '250',  label: '250 Stk.',   sub: '',           p: 18  },
+        { id: '500',  label: '500 Stk.',   sub: 'Bestseller', p: 32  },
+        { id: '1000', label: '1.000 Stk.', sub: '',           p: 52  },
+        { id: '2500', label: '2.500 Stk.', sub: '',           p: 95  },
+        { id: '5000', label: '5.000 Stk.', sub: 'Vorteil',    p: 150 },
       ]},
       { key: 'material', opts: [
         { id: 'std',   label: '135g Standard',   sub: 'Bilderdruckpapier', p: 0  },
-        { id: 'prem',  label: '170g Premium',    sub: 'Hochwertig',        p: 6  },
-        { id: 'matt',  label: 'Mattelaminiert',  sub: 'Edel & stilvoll',   p: 12 },
-        { id: 'glanz', label: 'Glanzlaminiert',  sub: 'Farbintensiv',      p: 12 },
-        { id: 'eco',   label: 'Recyclingpapier', sub: 'Umweltfreundlich',  p: 3  },
+        { id: 'prem',  label: '170g Premium',    sub: 'Hochwertig',        p: 8  },
+        { id: 'matt',  label: 'Mattelaminiert',  sub: 'Edel & stilvoll',   p: 18 },
+        { id: 'glanz', label: 'Glanzlaminiert',  sub: 'Farbintensiv',      p: 18 },
+        { id: 'eco',   label: 'Recyclingpapier', sub: 'Umweltfreundlich',  p: 5  },
       ]},
     ],
   },
   {
-    id: 'visitenkarten', cat: 'print',
-    image: '/products/visitenkarten.png',
-    name: 'Visitenkarten',
+    id: 'visitenkarten', cat: 'print', image: '/products/visitenkarten.png', name: 'Visitenkarten',
     specs: ['85 × 55 mm · Portrait mögl.', 'Ein- oder beidseitig', '300g – 600g Karton', 'ab 100 Stück'],
-    basePrice: 9,
+    basePrice: 25,
     steps: [
       { key: 'format', opts: [
         { id: 'quer', label: 'Querformat',  sub: '85 × 55 mm', p: 0 },
         { id: 'hoch', label: 'Hochformat',  sub: '55 × 85 mm', p: 0 },
-        { id: 'quad', label: 'Quadratisch', sub: '55 × 55 mm', p: 2 },
+        { id: 'quad', label: 'Quadratisch', sub: '55 × 55 mm', p: 5 },
       ]},
       { key: 'qty', opts: [
         { id: '100',  label: '100 Stk.',   sub: '',           p: 0  },
-        { id: '250',  label: '250 Stk.',   sub: '',           p: 7  },
-        { id: '500',  label: '500 Stk.',   sub: 'Bestseller', p: 14 },
-        { id: '1000', label: '1.000 Stk.', sub: '',           p: 22 },
-        { id: '2000', label: '2.000 Stk.', sub: '',           p: 38 },
+        { id: '250',  label: '250 Stk.',   sub: '',           p: 12 },
+        { id: '500',  label: '500 Stk.',   sub: 'Bestseller', p: 20 },
+        { id: '1000', label: '1.000 Stk.', sub: '',           p: 32 },
+        { id: '2000', label: '2.000 Stk.', sub: '',           p: 52 },
       ]},
       { key: 'material', opts: [
         { id: '300',   label: '300g Karton',    sub: 'Standard',     p: 0  },
-        { id: 'matt',  label: 'Mattelaminiert', sub: 'Softer Look',  p: 8  },
-        { id: 'glanz', label: 'Glanzlaminiert', sub: 'Brilliant',    p: 8  },
-        { id: 'soft',  label: 'Soft-Touch',     sub: 'Exklusiv',     p: 14 },
-        { id: 'black', label: 'Black Core',     sub: 'Luxus',        p: 18 },
-        { id: 'trans', label: 'Transparent',    sub: 'Durchsichtig', p: 22 },
+        { id: 'matt',  label: 'Mattelaminiert', sub: 'Softer Look',  p: 12 },
+        { id: 'glanz', label: 'Glanzlaminiert', sub: 'Brilliant',    p: 12 },
+        { id: 'soft',  label: 'Soft-Touch',     sub: 'Exklusiv',     p: 22 },
+        { id: 'black', label: 'Black Core',     sub: 'Luxus',        p: 32 },
+        { id: 'trans', label: 'Transparent',    sub: 'Durchsichtig', p: 38 },
       ]},
     ],
   },
   {
-    id: 'poster', cat: 'print',
-    image: '/products/poster.png',
-    name: 'Poster',
+    id: 'poster', cat: 'print', image: '/products/poster.png', name: 'Poster',
     specs: ['DIN A3 bis DIN A0', '170g – 200g Papier', 'Indoor & Outdoor', 'Einzeldruck möglich'],
-    basePrice: 15,
+    basePrice: 8,
     steps: [
       { key: 'format', opts: [
         { id: 'a3', label: 'DIN A3', sub: '297 × 420 mm',  p: 0  },
-        { id: 'a2', label: 'DIN A2', sub: '420 × 594 mm',  p: 8  },
-        { id: 'a1', label: 'DIN A1', sub: '594 × 841 mm',  p: 20 },
-        { id: 'a0', label: 'DIN A0', sub: '841 × 1189 mm', p: 45 },
+        { id: 'a2', label: 'DIN A2', sub: '420 × 594 mm',  p: 9  },
+        { id: 'a1', label: 'DIN A1', sub: '594 × 841 mm',  p: 22 },
+        { id: 'a0', label: 'DIN A0', sub: '841 × 1189 mm', p: 48 },
       ]},
       { key: 'qty', opts: [
         { id: '1',   label: '1 Stk.',   sub: 'Einzeldruck', p: 0   },
-        { id: '5',   label: '5 Stk.',   sub: '',            p: 12  },
-        { id: '10',  label: '10 Stk.',  sub: '',            p: 22  },
-        { id: '25',  label: '25 Stk.',  sub: '',            p: 48  },
-        { id: '50',  label: '50 Stk.',  sub: '',            p: 85  },
-        { id: '100', label: '100 Stk.', sub: '',            p: 140 },
+        { id: '5',   label: '5 Stk.',   sub: '',            p: 18  },
+        { id: '10',  label: '10 Stk.',  sub: '',            p: 32  },
+        { id: '25',  label: '25 Stk.',  sub: '',            p: 68  },
+        { id: '50',  label: '50 Stk.',  sub: '',            p: 120 },
+        { id: '100', label: '100 Stk.', sub: '',            p: 195 },
       ]},
       { key: 'material', opts: [
-        { id: 'std',    label: '170g Plakat',     sub: 'Standard',   p: 0  },
-        { id: 'photo',  label: '200g Photopapier',sub: 'Hochglanz',  p: 8  },
-        { id: 'pvc',    label: 'PVC Folie',       sub: 'Wetterfest', p: 18 },
-        { id: 'textil', label: 'Textilposter',    sub: 'Stoff-Optik',p: 25 },
+        { id: 'std',    label: '170g Plakat',      sub: 'Standard',   p: 0  },
+        { id: 'photo',  label: '200g Photopapier', sub: 'Hochglanz',  p: 10 },
+        { id: 'pvc',    label: 'PVC Folie',        sub: 'Wetterfest', p: 22 },
+        { id: 'textil', label: 'Textilposter',     sub: 'Stoff-Optik',p: 32 },
       ]},
     ],
   },
   {
-    id: 'aufkleber', cat: 'print',
-    image: '/products/aufkleber.png',
-    name: 'Aufkleber',
+    id: 'aufkleber', cat: 'print', image: '/products/aufkleber.png', name: 'Aufkleber',
     specs: ['Freie Formen & Größen', 'Innen- & Außenkleber', 'Transparent, Matt, Glanz', 'ab 50 Stück'],
-    basePrice: 12,
+    basePrice: 29,
     steps: [
       { key: 'format', opts: [
         { id: 'a7',     label: 'A7 (50×74mm)',   sub: 'Klein',      p: 0  },
-        { id: 'a6',     label: 'A6 (74×105mm)',  sub: 'Standard',   p: 6  },
-        { id: 'a5',     label: 'A5 (105×148mm)', sub: 'Groß',       p: 14 },
-        { id: 'custom', label: 'Sonderformat',   sub: 'Freie Maße', p: 10 },
+        { id: 'a6',     label: 'A6 (74×105mm)',  sub: 'Standard',   p: 10 },
+        { id: 'a5',     label: 'A5 (105×148mm)', sub: 'Groß',       p: 22 },
+        { id: 'custom', label: 'Sonderformat',   sub: 'Freie Maße', p: 15 },
       ]},
       { key: 'qty', opts: [
         { id: '50',   label: '50 Stk.',    sub: '',           p: 0  },
-        { id: '100',  label: '100 Stk.',   sub: '',           p: 8  },
-        { id: '250',  label: '250 Stk.',   sub: 'Bestseller', p: 18 },
-        { id: '500',  label: '500 Stk.',   sub: '',           p: 30 },
-        { id: '1000', label: '1.000 Stk.', sub: '',           p: 50 },
+        { id: '100',  label: '100 Stk.',   sub: '',           p: 12 },
+        { id: '250',  label: '250 Stk.',   sub: 'Bestseller', p: 25 },
+        { id: '500',  label: '500 Stk.',   sub: '',           p: 42 },
+        { id: '1000', label: '1.000 Stk.', sub: '',           p: 68 },
       ]},
       { key: 'material', opts: [
-        { id: 'weiss',   label: 'Weiß matt',      sub: 'Standard',            p: 0  },
-        { id: 'glanz',   label: 'Glänzend',        sub: 'Farbintensiv',        p: 3  },
-        { id: 'trans',   label: 'Transparent',     sub: 'Unsichtbarer Rand',   p: 6  },
-        { id: 'outdoor', label: 'Outdoor UV',      sub: 'Witterungsbeständig', p: 8  },
-        { id: 'boden',   label: 'Bodenaufkleber',  sub: 'Rutschsicher',        p: 18 },
+        { id: 'weiss',   label: 'Weiß matt',     sub: 'Standard',            p: 0  },
+        { id: 'glanz',   label: 'Glänzend',       sub: 'Farbintensiv',        p: 5  },
+        { id: 'trans',   label: 'Transparent',    sub: 'Unsichtbarer Rand',   p: 10 },
+        { id: 'outdoor', label: 'Outdoor UV',     sub: 'Witterungsbeständig', p: 14 },
+        { id: 'boden',   label: 'Bodenaufkleber', sub: 'Rutschsicher',        p: 28 },
       ]},
     ],
   },
   {
-    id: 'broschuere', cat: 'print',
-    image: '/products/broschueren.png',
-    name: 'Broschüren',
+    id: 'broschuere', cat: 'print', image: '/products/broschueren.png', name: 'Broschüren',
     specs: ['DIN A5 & A4', '8 bis 64 Seiten', 'Klebe- oder Heftbindung', 'ab 50 Stück'],
-    basePrice: 39,
-    steps: [
-      { key: 'format', opts: [
-        { id: 'a5', label: 'DIN A5', sub: '148 × 210 mm', p: 0  },
-        { id: 'a4', label: 'DIN A4', sub: '210 × 297 mm', p: 18 },
-      ]},
-      { key: 'qty', opts: [
-        { id: '50',  label: '50 Stk.',  sub: '',           p: 0   },
-        { id: '100', label: '100 Stk.', sub: '',           p: 28  },
-        { id: '250', label: '250 Stk.', sub: 'Bestseller', p: 65  },
-        { id: '500', label: '500 Stk.', sub: '',           p: 115 },
-      ]},
-      { key: 'material', opts: [
-        { id: 'heft',  label: 'Klammerheftung', sub: '8–48 Seiten', p: 0  },
-        { id: 'klebe', label: 'Klebebindung',   sub: 'ab 40 Seiten',p: 12 },
-        { id: 'hard',  label: 'Hardcover',      sub: 'Premium',     p: 35 },
-      ]},
-    ],
-  },
-  {
-    id: 'postkarten', cat: 'print',
-    image: '/products/postkarten.png',
-    name: 'Postkarten',
-    specs: ['DIN A6 od. A5', '300g – 400g Karton', 'Ein- od. beidseitig', 'ab 100 Stück'],
-    basePrice: 14,
-    steps: [
-      { key: 'format', opts: [
-        { id: 'a6', label: 'DIN A6',  sub: '105 × 148 mm', p: 0 },
-        { id: 'a5', label: 'DIN A5',  sub: '148 × 210 mm', p: 8 },
-        { id: 'sq', label: 'Quadrat', sub: '148 × 148 mm', p: 4 },
-      ]},
-      { key: 'qty', opts: [
-        { id: '100',  label: '100 Stk.',   sub: '',           p: 0  },
-        { id: '250',  label: '250 Stk.',   sub: '',           p: 10 },
-        { id: '500',  label: '500 Stk.',   sub: 'Bestseller', p: 18 },
-        { id: '1000', label: '1.000 Stk.', sub: '',           p: 30 },
-      ]},
-      { key: 'material', opts: [
-        { id: 'std',   label: '300g Standard',  sub: '',        p: 0  },
-        { id: 'matt',  label: 'Mattelaminiert', sub: 'Edel',    p: 8  },
-        { id: 'glanz', label: 'Glanzlaminiert', sub: 'Farbig',  p: 8  },
-        { id: 'soft',  label: 'Soft-Touch',     sub: 'Premium', p: 14 },
-      ]},
-    ],
-  },
-
-  // ── SIGNAGE ──
-  {
-    id: 'banner', cat: 'sign',
-    image: '/products/banner.png',
-    name: 'Banner',
-    specs: ['PVC oder Textil', 'Ösen auf Wunsch', 'Innen- & Außeneinsatz', 'Beliebige Maße'],
-    basePrice: 29,
-    steps: [
-      { key: 'format', opts: [
-        { id: '60x100',  label: '60 × 100 cm',  sub: 'Klein',       p: 0  },
-        { id: '80x200',  label: '80 × 200 cm',  sub: 'Standard',    p: 18 },
-        { id: '100x300', label: '100 × 300 cm', sub: 'Groß',        p: 38 },
-        { id: 'custom',  label: 'Sondermaß',    sub: 'Nach Wunsch', p: 15 },
-      ]},
-      { key: 'qty', opts: [
-        { id: '1',  label: '1 Stk.',  sub: '',          p: 0  },
-        { id: '2',  label: '2 Stk.',  sub: '',          p: 22 },
-        { id: '5',  label: '5 Stk.',  sub: '',          p: 45 },
-        { id: '10', label: '10 Stk.', sub: 'Sparpaket', p: 80 },
-      ]},
-      { key: 'material', opts: [
-        { id: 'pvc',    label: 'PVC 510g',     sub: 'Standard & robust',  p: 0  },
-        { id: 'mesh',   label: 'Mesh-PVC',     sub: 'Winddurchlässig',    p: 8  },
-        { id: 'textil', label: 'Textilbanner', sub: 'Hochwertig',         p: 20 },
-        { id: 'flex',   label: 'Frontlit 540g',sub: 'Für Beleuchtung',    p: 12 },
-      ]},
-    ],
-  },
-  {
-    id: 'rollup', cat: 'sign',
-    image: '/products/rollup.png',
-    name: 'Roll-Up',
-    specs: ['85 × 200 cm Standard', 'Inkl. Tragetasche', 'Stabil & langlebig', '1–5 Werktage'],
-    basePrice: 79,
-    steps: [
-      { key: 'format', opts: [
-        { id: '85',  label: '85 × 200 cm',  sub: 'Standard',    p: 0  },
-        { id: '100', label: '100 × 200 cm', sub: 'Breit',       p: 20 },
-        { id: '120', label: '120 × 200 cm', sub: 'Extra breit', p: 38 },
-        { id: '150', label: '150 × 200 cm', sub: 'XXL',         p: 65 },
-      ]},
-      { key: 'qty', opts: [
-        { id: '1', label: '1 Stk.', sub: '',          p: 0   },
-        { id: '2', label: '2 Stk.', sub: '',          p: 60  },
-        { id: '3', label: '3 Stk.', sub: '',          p: 85  },
-        { id: '5', label: '5 Stk.', sub: 'Sparpaket', p: 130 },
-      ]},
-      { key: 'material', opts: [
-        { id: 'eco',  label: 'Eco',      sub: 'Budget',             p: 0  },
-        { id: 'std',  label: 'Standard', sub: 'Empfohlen',          p: 15 },
-        { id: 'prem', label: 'Premium',  sub: 'Doppelseitig mögl.', p: 35 },
-        { id: 'out',  label: 'Outdoor',  sub: 'Wetterfest',         p: 50 },
-      ]},
-    ],
-  },
-  {
-    id: 'pvcsign', cat: 'sign',
-    image: '/products/pvc_schild.png',
-    name: 'PVC-Schild',
-    specs: ['3–5 mm Hartschaum / PVC', 'Wetterfest & UV-stabil', 'Bohrungen auf Wunsch', 'Beliebige Größen'],
-    basePrice: 35,
-    steps: [
-      { key: 'format', opts: [
-        { id: 'a3',     label: 'A3 (30×42cm)', sub: '',           p: 0  },
-        { id: 'a2',     label: 'A2 (42×59cm)', sub: '',           p: 14 },
-        { id: 'a1',     label: 'A1 (59×84cm)', sub: '',           p: 28 },
-        { id: '50x70',  label: '50 × 70 cm',  sub: '',           p: 22 },
-        { id: '70x100', label: '70 × 100 cm', sub: '',           p: 45 },
-        { id: 'custom', label: 'Sondermaß',   sub: 'Nach Wunsch',p: 18 },
-      ]},
-      { key: 'qty', opts: [
-        { id: '1',  label: '1 Stk.',  sub: '',          p: 0  },
-        { id: '3',  label: '3 Stk.',  sub: '',          p: 25 },
-        { id: '5',  label: '5 Stk.',  sub: '',          p: 40 },
-        { id: '10', label: '10 Stk.', sub: 'Sparpaket', p: 70 },
-      ]},
-      { key: 'material', opts: [
-        { id: 'hs3',   label: 'Hartschaum 3mm', sub: 'Leicht, indoor', p: 0  },
-        { id: 'hs5',   label: 'Hartschaum 5mm', sub: 'Stabiler',       p: 8  },
-        { id: 'alu',   label: 'Aluminium 2mm',  sub: 'Langlebig',      p: 28 },
-        { id: 'acryl', label: 'Acrylglas',      sub: 'Premium-Optik',  p: 45 },
-      ]},
-    ],
-  },
-  {
-    id: 'fensterfolie', cat: 'sign',
-    image: '/products/fensterfolie.png',
-    name: 'Fensterfolie',
-    specs: ['Innen- oder Außenmontage', 'Vollflächig od. perforiert', 'Milchglas, Dekor, Bedruckt', 'Inkl. Montageservice'],
-    basePrice: 25,
-    steps: [
-      { key: 'format', opts: [
-        { id: '1',    label: 'bis 1 m²',      sub: 'Klein',       p: 0  },
-        { id: '3',    label: '1 – 3 m²',      sub: 'Schaufenster',p: 45 },
-        { id: '5',    label: '3 – 5 m²',      sub: 'Groß',        p: 90 },
-        { id: 'more', label: 'Mehr als 5 m²', sub: 'Auf Anfrage', p: 0  },
-      ]},
-      { key: 'qty', opts: [
-        { id: '1',    label: '1 Fenster',  sub: '',            p: 0  },
-        { id: '2',    label: '2 Fenster',  sub: '',            p: 18 },
-        { id: '3',    label: '3 Fenster',  sub: '',            p: 32 },
-        { id: 'more', label: 'Mehr als 3', sub: 'Auf Anfrage', p: 0  },
-      ]},
-      { key: 'material', opts: [
-        { id: 'milch', label: 'Milchglas',         sub: 'Sichtschutz',          p: 0  },
-        { id: 'dekor', label: 'Dekorfolie',         sub: 'Muster & Farben',      p: 5  },
-        { id: 'druck', label: 'Bedruckte Folie',    sub: 'Individuelles Motiv',  p: 15 },
-        { id: 'perf',  label: 'Perforierte Folie',  sub: 'Sicht von innen frei', p: 20 },
-      ]},
-    ],
-  },
-
-  {
-    id: 'autobeschriftung', cat: 'sign',
-    image: '/products/autobeschriftung.png',
-    name: 'Autobeschriftung',
-    specs: ['Selbstklebende Folie (Tape)', 'PKW, Transporter & LKW', 'Wetterfest & UV-beständig', 'Inkl. Montage vor Ort'],
     basePrice: 89,
     steps: [
       { key: 'format', opts: [
-        { id: 'pkw_teil',   label: 'PKW Teilfolierung',         sub: 'Türen, Motorhaube etc.',  p: 0   },
-        { id: 'pkw_voll',   label: 'PKW Vollfolierung',         sub: 'Komplettes Fahrzeug',     p: 200 },
-        { id: 'trans_teil', label: 'Transporter Teilfolierung', sub: 'Seiten & Heck',           p: 100 },
-        { id: 'trans_voll', label: 'Transporter Vollfolierung', sub: 'Komplettes Fahrzeug',     p: 350 },
+        { id: 'a5', label: 'DIN A5', sub: '148 × 210 mm', p: 0  },
+        { id: 'a4', label: 'DIN A4', sub: '210 × 297 mm', p: 28 },
       ]},
       { key: 'qty', opts: [
-        { id: '1',    label: '1 Fahrzeug',    sub: '',               p: 0   },
-        { id: '3',    label: '3 Fahrzeuge',   sub: 'Flotte',         p: 200 },
-        { id: '5',    label: '5 Fahrzeuge',   sub: 'Flottenrabatt',  p: 300 },
-        { id: 'mehr', label: '10+ Fahrzeuge', sub: 'Auf Anfrage',    p: 0   },
+        { id: '50',  label: '50 Stk.',  sub: '',           p: 0   },
+        { id: '100', label: '100 Stk.', sub: '',           p: 42  },
+        { id: '250', label: '250 Stk.', sub: 'Bestseller', p: 98  },
+        { id: '500', label: '500 Stk.', sub: '',           p: 172 },
       ]},
       { key: 'material', opts: [
-        { id: 'glanz',  label: 'Glanzfolie',   sub: 'Hochglanz',              p: 0  },
-        { id: 'matt',   label: 'Mattfolie',    sub: 'Edel & modern',          p: 30 },
-        { id: 'carbon', label: 'Carbon-Optik', sub: 'Sportlich',              p: 50 },
-        { id: 'chrom',  label: 'Chromfolie',   sub: 'Besonders auffällig',    p: 80 },
+        { id: 'heft',  label: 'Klammerheftung', sub: '8–48 Seiten',  p: 0  },
+        { id: 'klebe', label: 'Klebebindung',   sub: 'ab 40 Seiten', p: 18 },
+        { id: 'hard',  label: 'Hardcover',      sub: 'Premium',      p: 52 },
       ]},
     ],
   },
   {
-    id: 'sonnenschutz', cat: 'sign',
-    image: '/products/sonnenschutzfolie.png',
-    name: 'Sonnenschutzfolie',
-    specs: ['Max. Breite 1,52 m', 'Innen- oder Außenmontage', 'UV-Schutz bis 99%', 'Inkl. Montageservice'],
+    id: 'postkarten', cat: 'print', image: '/products/postkarten.png', name: 'Postkarten',
+    specs: ['DIN A6 od. A5', '300g – 400g Karton', 'Ein- od. beidseitig', 'ab 100 Stück'],
     basePrice: 35,
     steps: [
       { key: 'format', opts: [
-        { id: '1qm',   label: 'bis 1 m²',     sub: 'Kleines Fenster',  p: 0   },
-        { id: '3qm',   label: '1 – 3 m²',     sub: 'Standard',         p: 40  },
-        { id: '5qm',   label: '3 – 5 m²',     sub: 'Großes Fenster',   p: 80  },
-        { id: '10qm',  label: '5 – 10 m²',    sub: 'Fassade',          p: 150 },
+        { id: 'a6', label: 'DIN A6',  sub: '105 × 148 mm', p: 0  },
+        { id: 'a5', label: 'DIN A5',  sub: '148 × 210 mm', p: 12 },
+        { id: 'sq', label: 'Quadrat', sub: '148 × 148 mm', p: 8  },
       ]},
       { key: 'qty', opts: [
-        { id: '1',    label: '1 Fenster',  sub: '',            p: 0  },
-        { id: '2',    label: '2 Fenster',  sub: '',            p: 25 },
-        { id: '3',    label: '3 Fenster',  sub: '',            p: 45 },
-        { id: 'mehr', label: 'Mehr als 3', sub: 'Auf Anfrage', p: 0  },
+        { id: '100',  label: '100 Stk.',   sub: '',           p: 0  },
+        { id: '250',  label: '250 Stk.',   sub: '',           p: 15 },
+        { id: '500',  label: '500 Stk.',   sub: 'Bestseller', p: 28 },
+        { id: '1000', label: '1.000 Stk.', sub: '',           p: 48 },
       ]},
       { key: 'material', opts: [
-        { id: 'hell',    label: 'Hell (35% Tönung)',   sub: 'Leichter Schutz',          p: 0  },
-        { id: 'mittel',  label: 'Mittel (20% Tönung)', sub: 'Empfohlen',                p: 10 },
-        { id: 'dunkel',  label: 'Dunkel (5% Tönung)',  sub: 'Maximaler Schutz',         p: 15 },
-        { id: 'spiegel', label: 'Spiegelfolie',        sub: 'Sichtschutz + Sonnenschutz',p: 25 },
+        { id: 'std',   label: '300g Standard',  sub: '',        p: 0  },
+        { id: 'matt',  label: 'Mattelaminiert', sub: 'Edel',    p: 12 },
+        { id: 'glanz', label: 'Glanzlaminiert', sub: 'Farbig',  p: 12 },
+        { id: 'soft',  label: 'Soft-Touch',     sub: 'Premium', p: 22 },
       ]},
     ],
   },
+
+  // ── SIGNAGE ────────────────────────────────────────────────────────────────
   {
-    id: 'fensterbeschriftung', cat: 'sign',
-    image: '/products/fensterbeschriftung.png',
-    name: 'Fensterbeschriftung',
-    specs: ['Selbstklebende Folie (Tape)', 'Schaufenster & Glasflächen', 'Innen- oder Außenmontage', 'Inkl. Montage vor Ort'],
+    id: 'banner', cat: 'sign', image: '/products/banner.png', name: 'Banner',
+    specs: ['PVC oder Textil', 'Ösen auf Wunsch', 'Innen- & Außeneinsatz', 'Beliebige Maße'],
     basePrice: 49,
     steps: [
       { key: 'format', opts: [
-        { id: 'klein',   label: 'Kleines Fenster',    sub: 'bis 1 m²',    p: 0   },
-        { id: 'mittel',  label: 'Mittleres Fenster',  sub: '1 – 3 m²',    p: 50  },
-        { id: 'gross',   label: 'Großes Schaufenster',sub: '3 – 6 m²',    p: 120 },
-        { id: 'fassade', label: 'Fassade / Mehrere',  sub: 'Auf Anfrage', p: 0   },
+        { id: '60x100',  label: '60 × 100 cm',  sub: 'Klein',       p: 0  },
+        { id: '80x200',  label: '80 × 200 cm',  sub: 'Standard',    p: 28 },
+        { id: '100x300', label: '100 × 300 cm', sub: 'Groß',        p: 58 },
+        { id: 'custom',  label: 'Sondermaß',    sub: 'Nach Wunsch', p: 22 },
+      ]},
+      { key: 'qty', opts: [
+        { id: '1',  label: '1 Stk.',  sub: '',          p: 0   },
+        { id: '2',  label: '2 Stk.',  sub: '',          p: 38  },
+        { id: '5',  label: '5 Stk.',  sub: '',          p: 78  },
+        { id: '10', label: '10 Stk.', sub: 'Sparpaket', p: 138 },
+      ]},
+      { key: 'material', opts: [
+        { id: 'pvc',    label: 'PVC 510g',      sub: 'Standard & robust', p: 0  },
+        { id: 'mesh',   label: 'Mesh-PVC',      sub: 'Winddurchlässig',   p: 12 },
+        { id: 'textil', label: 'Textilbanner',  sub: 'Hochwertig',        p: 32 },
+        { id: 'flex',   label: 'Frontlit 540g', sub: 'Für Beleuchtung',   p: 18 },
+      ]},
+    ],
+  },
+  {
+    id: 'rollup', cat: 'sign', image: '/products/rollup.png', name: 'Roll-Up',
+    specs: ['85 × 200 cm Standard', 'Inkl. Tragetasche', 'Stabil & langlebig', '1–5 Werktage'],
+    basePrice: 109,
+    steps: [
+      { key: 'format', opts: [
+        { id: '85',  label: '85 × 200 cm',  sub: 'Standard',    p: 0  },
+        { id: '100', label: '100 × 200 cm', sub: 'Breit',       p: 32 },
+        { id: '120', label: '120 × 200 cm', sub: 'Extra breit', p: 58 },
+        { id: '150', label: '150 × 200 cm', sub: 'XXL',         p: 98 },
+      ]},
+      { key: 'qty', opts: [
+        { id: '1', label: '1 Stk.', sub: '',           p: 0   },
+        { id: '2', label: '2 Stk.', sub: '',           p: 92  },
+        { id: '3', label: '3 Stk.', sub: '',           p: 128 },
+        { id: '5', label: '5 Stk.', sub: 'Sparpaket',  p: 195 },
+      ]},
+      { key: 'material', opts: [
+        { id: 'eco',  label: 'Eco',      sub: 'Budget',             p: 0  },
+        { id: 'std',  label: 'Standard', sub: 'Empfohlen',          p: 22 },
+        { id: 'prem', label: 'Premium',  sub: 'Doppelseitig mögl.', p: 52 },
+        { id: 'out',  label: 'Outdoor',  sub: 'Wetterfest',         p: 75 },
+      ]},
+    ],
+  },
+  {
+    id: 'pvcsign', cat: 'sign', image: '/products/pvc_schild.png', name: 'PVC-Schild',
+    specs: ['3–5 mm Hartschaum / PVC', 'Wetterfest & UV-stabil', 'Bohrungen auf Wunsch', 'Beliebige Größen'],
+    basePrice: 45,
+    steps: [
+      { key: 'format', opts: [
+        { id: 'a3',     label: 'A3 (30×42cm)', sub: '',            p: 0  },
+        { id: 'a2',     label: 'A2 (42×59cm)', sub: '',            p: 22 },
+        { id: 'a1',     label: 'A1 (59×84cm)', sub: '',            p: 45 },
+        { id: '50x70',  label: '50 × 70 cm',  sub: '',            p: 35 },
+        { id: '70x100', label: '70 × 100 cm', sub: '',            p: 68 },
+        { id: 'custom', label: 'Sondermaß',   sub: 'Nach Wunsch', p: 28 },
+      ]},
+      { key: 'qty', opts: [
+        { id: '1',  label: '1 Stk.',  sub: '',          p: 0   },
+        { id: '3',  label: '3 Stk.',  sub: '',          p: 38  },
+        { id: '5',  label: '5 Stk.',  sub: '',          p: 62  },
+        { id: '10', label: '10 Stk.', sub: 'Sparpaket', p: 108 },
+      ]},
+      { key: 'material', opts: [
+        { id: 'hs3',   label: 'Hartschaum 3mm', sub: 'Leicht, indoor', p: 0  },
+        { id: 'hs5',   label: 'Hartschaum 5mm', sub: 'Stabiler',       p: 12 },
+        { id: 'alu',   label: 'Aluminium 2mm',  sub: 'Langlebig',      p: 45 },
+        { id: 'acryl', label: 'Acrylglas',      sub: 'Premium-Optik',  p: 72 },
+      ]},
+    ],
+  },
+  {
+    id: 'fensterfolie', cat: 'sign', image: '/products/fensterfolie.png', name: 'Fensterfolie',
+    specs: ['Innen- oder Außenmontage', 'Vollflächig od. perforiert', 'Milchglas, Dekor, Bedruckt', 'Inkl. Montageservice'],
+    basePrice: 79,
+    steps: [
+      { key: 'format', opts: [
+        { id: '1',    label: 'bis 1 m²',      sub: 'Klein',       p: 0   },
+        { id: '3',    label: '1 – 3 m²',      sub: 'Schaufenster',p: 68  },
+        { id: '5',    label: '3 – 5 m²',      sub: 'Groß',        p: 135 },
+        { id: 'more', label: 'Mehr als 5 m²', sub: 'Auf Anfrage', p: 0   },
       ]},
       { key: 'qty', opts: [
         { id: '1',    label: '1 Fenster',  sub: '',            p: 0  },
-        { id: '2',    label: '2 Fenster',  sub: '',            p: 35 },
-        { id: '3',    label: '3 Fenster',  sub: '',            p: 60 },
-        { id: 'mehr', label: 'Mehr als 3', sub: 'Auf Anfrage', p: 0  },
+        { id: '2',    label: '2 Fenster',  sub: '',            p: 58 },
+        { id: '3',    label: '3 Fenster',  sub: '',            p: 95 },
+        { id: 'more', label: 'Mehr als 3', sub: 'Auf Anfrage', p: 0  },
       ]},
       { key: 'material', opts: [
-        { id: 'weiss',  label: 'Weiße Folie',       sub: 'Classic',          p: 0  },
-        { id: 'trans',  label: 'Transparente Folie',sub: 'Unsichtbarer Rand',p: 8  },
-        { id: 'gold',   label: 'Goldfolie',         sub: 'Edel & auffällig', p: 20 },
-        { id: 'silber', label: 'Silberfolie',        sub: 'Modern',           p: 15 },
+        { id: 'milch', label: 'Milchglas',        sub: 'Sichtschutz',          p: 0  },
+        { id: 'dekor', label: 'Dekorfolie',        sub: 'Muster & Farben',      p: 15 },
+        { id: 'druck', label: 'Bedruckte Folie',   sub: 'Individuelles Motiv',  p: 35 },
+        { id: 'perf',  label: 'Perforierte Folie', sub: 'Sicht von innen frei', p: 42 },
+      ]},
+    ],
+  },
+  {
+    id: 'autobeschriftung', cat: 'sign', image: '/products/autobeschriftung.png', name: 'Autobeschriftung',
+    specs: ['Selbstklebende Folie (Tape)', 'PKW, Transporter & LKW', 'Wetterfest & UV-beständig', 'Inkl. Montage vor Ort'],
+    basePrice: 199,
+    steps: [
+      { key: 'format', opts: [
+        { id: 'pkw_teil',   label: 'PKW Teilfolierung',         sub: 'Türen, Motorhaube etc.', p: 0   },
+        { id: 'pkw_voll',   label: 'PKW Vollfolierung',         sub: 'Komplettes Fahrzeug',    p: 450 },
+        { id: 'trans_teil', label: 'Transporter Teilfolierung', sub: 'Seiten & Heck',          p: 200 },
+        { id: 'trans_voll', label: 'Transporter Vollfolierung', sub: 'Komplettes Fahrzeug',    p: 650 },
+      ]},
+      { key: 'qty', opts: [
+        { id: '1',    label: '1 Fahrzeug',    sub: '',              p: 0   },
+        { id: '3',    label: '3 Fahrzeuge',   sub: 'Flotte',        p: 380 },
+        { id: '5',    label: '5 Fahrzeuge',   sub: 'Flottenrabatt', p: 580 },
+        { id: 'mehr', label: '10+ Fahrzeuge', sub: 'Auf Anfrage',   p: 0   },
+      ]},
+      { key: 'material', opts: [
+        { id: 'glanz',  label: 'Glanzfolie',   sub: 'Hochglanz',           p: 0   },
+        { id: 'matt',   label: 'Mattfolie',    sub: 'Edel & modern',       p: 65  },
+        { id: 'carbon', label: 'Carbon-Optik', sub: 'Sportlich',           p: 115 },
+        { id: 'chrom',  label: 'Chromfolie',   sub: 'Besonders auffällig', p: 175 },
+      ]},
+    ],
+  },
+  {
+    id: 'sonnenschutz', cat: 'sign', image: '/products/sonnenschutzfolie.png', name: 'Sonnenschutzfolie',
+    specs: ['Max. Breite 1,52 m', 'Innen- oder Außenmontage', 'UV-Schutz bis 99%', 'Inkl. Montageservice'],
+    basePrice: 79,
+    steps: [
+      { key: 'format', opts: [
+        { id: '1qm',  label: 'bis 1 m²',  sub: 'Kleines Fenster', p: 0   },
+        { id: '3qm',  label: '1 – 3 m²',  sub: 'Standard',        p: 88  },
+        { id: '5qm',  label: '3 – 5 m²',  sub: 'Großes Fenster',  p: 168 },
+        { id: '10qm', label: '5 – 10 m²', sub: 'Fassade',         p: 295 },
+      ]},
+      { key: 'qty', opts: [
+        { id: '1',    label: '1 Fenster',  sub: '',            p: 0   },
+        { id: '2',    label: '2 Fenster',  sub: '',            p: 65  },
+        { id: '3',    label: '3 Fenster',  sub: '',            p: 115 },
+        { id: 'mehr', label: 'Mehr als 3', sub: 'Auf Anfrage', p: 0   },
+      ]},
+      { key: 'material', opts: [
+        { id: 'hell',    label: 'Hell (35% Tönung)',   sub: 'Leichter Schutz',            p: 0  },
+        { id: 'mittel',  label: 'Mittel (20% Tönung)', sub: 'Empfohlen',                  p: 22 },
+        { id: 'dunkel',  label: 'Dunkel (5% Tönung)',  sub: 'Maximaler Schutz',           p: 32 },
+        { id: 'spiegel', label: 'Spiegelfolie',        sub: 'Sichtschutz + Sonnenschutz', p: 55 },
+      ]},
+    ],
+  },
+  {
+    id: 'fensterbeschriftung', cat: 'sign', image: '/products/fensterbeschriftung.png', name: 'Fensterbeschriftung',
+    specs: ['Selbstklebende Folie (Tape)', 'Schaufenster & Glasflächen', 'Innen- oder Außenmontage', 'Inkl. Montage vor Ort'],
+    basePrice: 89,
+    steps: [
+      { key: 'format', opts: [
+        { id: 'klein',   label: 'Kleines Fenster',     sub: 'bis 1 m²',    p: 0   },
+        { id: 'mittel',  label: 'Mittleres Fenster',   sub: '1 – 3 m²',    p: 95  },
+        { id: 'gross',   label: 'Großes Schaufenster', sub: '3 – 6 m²',    p: 195 },
+        { id: 'fassade', label: 'Fassade / Mehrere',   sub: 'Auf Anfrage', p: 0   },
+      ]},
+      { key: 'qty', opts: [
+        { id: '1',    label: '1 Fenster',  sub: '',            p: 0   },
+        { id: '2',    label: '2 Fenster',  sub: '',            p: 72  },
+        { id: '3',    label: '3 Fenster',  sub: '',            p: 118 },
+        { id: 'mehr', label: 'Mehr als 3', sub: 'Auf Anfrage', p: 0   },
+      ]},
+      { key: 'material', opts: [
+        { id: 'weiss',  label: 'Weiße Folie',        sub: 'Classic',           p: 0  },
+        { id: 'trans',  label: 'Transparente Folie', sub: 'Unsichtbarer Rand', p: 18 },
+        { id: 'gold',   label: 'Goldfolie',          sub: 'Edel & auffällig',  p: 38 },
+        { id: 'silber', label: 'Silberfolie',         sub: 'Modern',            p: 28 },
       ]},
     ],
   },
 
-  // ── TEXTILIEN ──
+  // ── TEXTILIEN ──────────────────────────────────────────────────────────────
   {
-    id: 'tshirt', cat: 'textil',
-    image: '/products/tshirt.png',
-    name: 'T-Shirts',
+    id: 'tshirt', cat: 'textil', image: '/products/tshirt.png', name: 'T-Shirts',
     specs: ['S – 5XL · viele Farben', '100% Baumwolle, 180g', 'Sieb- od. Transferdruck', 'ab 10 Stück'],
-    basePrice: 14,
+    basePrice: 149,
     steps: [
       { key: 'format', opts: [
-        { id: 'rund',  label: 'Rundhals',     sub: 'Classic', p: 0 },
-        { id: 'vneck', label: 'V-Neck',       sub: 'Casual',  p: 2 },
-        { id: 'polo',  label: 'Poloshirt',    sub: 'Business',p: 6 },
-        { id: 'lang',  label: 'Langarmshirt', sub: 'Winter',  p: 5 },
+        { id: 'rund',  label: 'Rundhals',     sub: 'Classic',  p: 0  },
+        { id: 'vneck', label: 'V-Neck',       sub: 'Casual',   p: 18 },
+        { id: 'polo',  label: 'Poloshirt',    sub: 'Business', p: 55 },
+        { id: 'lang',  label: 'Langarmshirt', sub: 'Winter',   p: 38 },
       ]},
       { key: 'qty', opts: [
-        { id: '10',  label: '10 Stk.',  sub: '',           p: 0   },
-        { id: '25',  label: '25 Stk.',  sub: '',           p: 60  },
-        { id: '50',  label: '50 Stk.',  sub: 'Bestseller', p: 110 },
-        { id: '100', label: '100 Stk.', sub: '',           p: 190 },
-        { id: '250', label: '250 Stk.', sub: '',           p: 420 },
+        { id: '10',  label: '10 Stk.',  sub: '14,90 € / Stk.', p: 0   },
+        { id: '25',  label: '25 Stk.',  sub: '12,90 € / Stk.', p: 98  },
+        { id: '50',  label: '50 Stk.',  sub: '11,90 € / Stk.', p: 178 },
+        { id: '100', label: '100 Stk.', sub: '10,90 € / Stk.', p: 318 },
+        { id: '250', label: '250 Stk.', sub: '9,90 € / Stk.',  p: 668 },
       ]},
       { key: 'material', opts: [
-        { id: 'sieb',     label: 'Siebdruck',       sub: 'Langlebig & scharf', p: 0  },
-        { id: 'dtg',      label: 'Digitaldruck DTG', sub: 'Fotorealistisch',   p: 4  },
-        { id: 'transfer', label: 'Transferdruck',    sub: 'Farbintensiv',      p: 2  },
-        { id: 'stick',    label: 'Stickerei',        sub: 'Premium-Look',      p: 12 },
+        { id: 'sieb',     label: 'Siebdruck',        sub: 'Langlebig & scharf', p: 0  },
+        { id: 'dtg',      label: 'Digitaldruck DTG', sub: 'Fotorealistisch',    p: 35 },
+        { id: 'transfer', label: 'Transferdruck',    sub: 'Farbintensiv',       p: 22 },
+        { id: 'stick',    label: 'Stickerei',        sub: 'Premium-Look',       p: 78 },
       ]},
     ],
   },
   {
-    id: 'hoodie', cat: 'textil',
-    image: '/products/hoodie.png',
-    name: 'Hoodies & Sweatshirts',
+    id: 'hoodie', cat: 'textil', image: '/products/hoodie.png', name: 'Hoodies & Sweatshirts',
     specs: ['S – 3XL', 'Vorder- & Rückseitendruck', 'Hochwertige Verarbeitung', 'ab 10 Stück'],
-    basePrice: 29,
+    basePrice: 289,
     steps: [
       { key: 'format', opts: [
-        { id: 'hood',  label: 'Kapuzenpullover',  sub: 'Kapuze mit Kordel',  p: 0  },
-        { id: 'sweat', label: 'Sweatshirt',        sub: 'Ohne Kapuze',        p: 0  },
-        { id: 'zip',   label: 'Zip-Hoodie',        sub: 'Mit Reißverschluss', p: 8  },
-        { id: 'soft',  label: 'Softshell-Jacke',   sub: 'Outdoor',            p: 22 },
+        { id: 'hood',  label: 'Kapuzenpullover',  sub: 'Classic',           p: 0   },
+        { id: 'sweat', label: 'Sweatshirt',        sub: 'Ohne Kapuze',       p: 0   },
+        { id: 'zip',   label: 'Zip-Hoodie',        sub: 'Mit Reißverschluss',p: 65  },
+        { id: 'soft',  label: 'Softshell-Jacke',   sub: 'Outdoor',           p: 155 },
       ]},
       { key: 'qty', opts: [
-        { id: '10',  label: '10 Stk.',  sub: '',           p: 0   },
-        { id: '25',  label: '25 Stk.',  sub: '',           p: 95  },
-        { id: '50',  label: '50 Stk.',  sub: 'Bestseller', p: 175 },
-        { id: '100', label: '100 Stk.', sub: '',           p: 310 },
+        { id: '10',  label: '10 Stk.',  sub: '28,90 € / Stk.', p: 0   },
+        { id: '25',  label: '25 Stk.',  sub: '24,90 € / Stk.', p: 135 },
+        { id: '50',  label: '50 Stk.',  sub: '21,90 € / Stk.', p: 248 },
+        { id: '100', label: '100 Stk.', sub: '18,90 € / Stk.', p: 458 },
       ]},
       { key: 'material', opts: [
         { id: 'sieb',     label: 'Siebdruck',    sub: 'Klassisch',       p: 0  },
-        { id: 'dtg',      label: 'Digitaldruck', sub: 'Fotorealistisch', p: 6  },
-        { id: 'transfer', label: 'Flex-Transfer',sub: 'Edel & glatt',   p: 5  },
-        { id: 'stick',    label: 'Stickerei',    sub: 'Hochwertig',      p: 18 },
+        { id: 'dtg',      label: 'Digitaldruck', sub: 'Fotorealistisch', p: 55 },
+        { id: 'transfer', label: 'Flex-Transfer',sub: 'Edel & glatt',    p: 42 },
+        { id: 'stick',    label: 'Stickerei',    sub: 'Hochwertig',      p: 98 },
       ]},
     ],
   },
   {
-    id: 'workwear', cat: 'textil',
-    image: '/products/arbeitsbekleidung.png',
-    name: 'Arbeitsbekleidung',
+    id: 'workwear', cat: 'textil', image: '/products/arbeitsbekleidung.png', name: 'Arbeitsbekleidung',
     specs: ['Warnschutz & Berufskleidung', 'Personalisiert mit Logo', 'Waschbeständiger Druck', 'Flottenbestellungen'],
-    basePrice: 24,
+    basePrice: 139,
     steps: [
       { key: 'format', opts: [
-        { id: 'weste', label: 'Warnweste',    sub: 'EN ISO 20471', p: 0  },
-        { id: 'hose',  label: 'Arbeitshose',  sub: 'Robust',       p: 10 },
-        { id: 'jacke', label: 'Arbeitsjacke', sub: 'Wind & Regen', p: 22 },
-        { id: 'cap',   label: 'Arbeitscap',   sub: '',             p: 4  },
+        { id: 'weste', label: 'Warnweste',    sub: 'EN ISO 20471', p: 0   },
+        { id: 'hose',  label: 'Arbeitshose',  sub: 'Robust',       p: 65  },
+        { id: 'jacke', label: 'Arbeitsjacke', sub: 'Wind & Regen', p: 135 },
+        { id: 'cap',   label: 'Arbeitscap',   sub: '',             p: 22  },
       ]},
       { key: 'qty', opts: [
         { id: '5',  label: '5 Stk.',  sub: '',             p: 0   },
-        { id: '10', label: '10 Stk.', sub: '',             p: 55  },
-        { id: '25', label: '25 Stk.', sub: 'Flottenpaket', p: 120 },
-        { id: '50', label: '50 Stk.', sub: '',             p: 220 },
+        { id: '10', label: '10 Stk.', sub: '',             p: 98  },
+        { id: '25', label: '25 Stk.', sub: 'Flottenpaket', p: 215 },
+        { id: '50', label: '50 Stk.', sub: '',             p: 395 },
       ]},
       { key: 'material', opts: [
         { id: 'trans', label: 'Transferdruck', sub: 'Standard',  p: 0  },
-        { id: 'stick', label: 'Stickerei',     sub: 'Langlebig', p: 8  },
-        { id: 'laser', label: 'Lasergravur',   sub: 'Schilder',  p: 15 },
+        { id: 'stick', label: 'Stickerei',     sub: 'Langlebig', p: 48 },
+        { id: 'laser', label: 'Lasergravur',   sub: 'Schilder',  p: 75 },
       ]},
     ],
   },
 
-  // ── PROMO ──
+  // ── PROMO ───────────────────────────────────────────────────────────────────
   {
-    id: 'kugel', cat: 'promo',
-    image: '/products/kugelschreiber.png',
-    name: 'Kugelschreiber',
+    id: 'kugel', cat: 'promo', image: '/products/kugelschreiber.png', name: 'Kugelschreiber',
     specs: ['Gravur od. Tampondruck', 'Viele Farben & Stile', 'ab 50 Stück', 'Schnelle Lieferung'],
-    basePrice: 0.49,
+    basePrice: 45,
     steps: [
       { key: 'format', opts: [
-        { id: 'classic', label: 'Classic',  sub: 'Drehkugelschreiber', p: 0   },
-        { id: 'metal',   label: 'Metall',   sub: 'Premium-Look',       p: 0.6 },
-        { id: 'touch',   label: 'Touchpen', sub: 'Smartphone-Tip',     p: 0.4 },
-        { id: 'eco',     label: 'Recycled', sub: 'Nachhaltig',         p: 0.2 },
+        { id: 'classic', label: 'Classic',  sub: '0,90 € / Stk.', p: 0  },
+        { id: 'metal',   label: 'Metall',   sub: '1,50 € / Stk.', p: 30 },
+        { id: 'touch',   label: 'Touchpen', sub: '1,20 € / Stk.', p: 15 },
+        { id: 'eco',     label: 'Recycled', sub: '1,00 € / Stk.', p: 5  },
       ]},
       { key: 'qty', opts: [
         { id: '50',   label: '50 Stk.',    sub: '',           p: 0   },
-        { id: '100',  label: '100 Stk.',   sub: '',           p: 20  },
-        { id: '250',  label: '250 Stk.',   sub: 'Bestseller', p: 55  },
-        { id: '500',  label: '500 Stk.',   sub: '',           p: 95  },
-        { id: '1000', label: '1.000 Stk.', sub: 'Vorteil',    p: 160 },
+        { id: '100',  label: '100 Stk.',   sub: '',           p: 35  },
+        { id: '250',  label: '250 Stk.',   sub: 'Bestseller', p: 88  },
+        { id: '500',  label: '500 Stk.',   sub: '',           p: 158 },
+        { id: '1000', label: '1.000 Stk.', sub: 'Vorteil',    p: 278 },
       ]},
       { key: 'material', opts: [
-        { id: 'laser', label: 'Lasergravur', sub: 'Edel & dauerhaft', p: 0   },
-        { id: 'druck', label: 'Tampondruck', sub: 'Farbig',           p: 0   },
-        { id: 'praeg', label: 'Prägung',     sub: 'Reliefeffekt',     p: 0.1 },
+        { id: 'laser', label: 'Lasergravur', sub: 'Edel & dauerhaft', p: 0  },
+        { id: 'druck', label: 'Tampondruck', sub: 'Farbig',           p: 0  },
+        { id: 'praeg', label: 'Prägung',     sub: 'Reliefeffekt',     p: 12 },
       ]},
     ],
   },
   {
-    id: 'tassen', cat: 'promo',
-    image: '/products/werbetassen.png',
-    name: 'Werbetassen',
+    id: 'tassen', cat: 'promo', image: '/products/werbetassen.png', name: 'Werbetassen',
     specs: ['300 ml Keramik-Standard', 'Spülmaschinenfest', 'Innen & Außen bedruckbar', 'ab 12 Stück'],
-    basePrice: 4.90,
+    basePrice: 89,
     steps: [
       { key: 'format', opts: [
-        { id: 'kaffee',  label: 'Kaffeetasse',  sub: '300 ml',           p: 0   },
-        { id: 'jumbo',   label: 'Jumbo-Tasse',  sub: '450 ml',           p: 1.5 },
-        { id: 'thermo',  label: 'Thermobecher', sub: '400 ml Edelstahl', p: 5   },
-        { id: 'esp',     label: 'Espressotasse',sub: '100 ml',           p: 0   },
+        { id: 'kaffee',  label: 'Kaffeetasse',  sub: '300 ml',           p: 0  },
+        { id: 'jumbo',   label: 'Jumbo-Tasse',  sub: '450 ml',           p: 28 },
+        { id: 'thermo',  label: 'Thermobecher', sub: '400 ml Edelstahl', p: 78 },
+        { id: 'esp',     label: 'Espressotasse',sub: '100 ml',           p: 0  },
       ]},
       { key: 'qty', opts: [
-        { id: '12',  label: '12 Stk.',  sub: '',          p: 0   },
-        { id: '24',  label: '24 Stk.',  sub: '',          p: 35  },
-        { id: '50',  label: '50 Stk.',  sub: '',          p: 75  },
-        { id: '100', label: '100 Stk.', sub: 'Sparpaket', p: 130 },
+        { id: '12',  label: '12 Stk.',  sub: '7,40 € / Stk.', p: 0   },
+        { id: '24',  label: '24 Stk.',  sub: '6,90 € / Stk.', p: 58  },
+        { id: '50',  label: '50 Stk.',  sub: '6,40 € / Stk.', p: 118 },
+        { id: '100', label: '100 Stk.', sub: '5,90 € / Stk.', p: 198 },
       ]},
       { key: 'material', opts: [
-        { id: 'ein',   label: 'Einseitig',    sub: '1 Motiv',     p: 0   },
-        { id: 'zwei',  label: 'Zweiseitig',   sub: '2 Motive',    p: 1.5 },
-        { id: 'rund',  label: 'Rundumdruck',  sub: '360°',        p: 3   },
-        { id: 'innen', label: 'Innen farbig', sub: '+ Außendruck',p: 2   },
+        { id: 'ein',   label: 'Einseitig',    sub: '1 Motiv',     p: 0  },
+        { id: 'zwei',  label: 'Zweiseitig',   sub: '2 Motive',    p: 22 },
+        { id: 'rund',  label: 'Rundumdruck',  sub: '360°',        p: 42 },
+        { id: 'innen', label: 'Innen farbig', sub: '+ Außendruck',p: 28 },
       ]},
     ],
   },
 
-  // ── GASTRO ──
+  // ── GASTRO ──────────────────────────────────────────────────────────────────
   {
-    id: 'speisekarte', cat: 'gastro',
-    image: '/products/speisekarten.png',
-    name: 'Speisekarten',
+    id: 'speisekarte', cat: 'gastro', image: '/products/speisekarten.png', name: 'Speisekarten',
     specs: ['A4 od. A5 Format', 'Hard- od. Softcover', 'Wasserabweisend mögl.', 'ab 10 Stück'],
-    basePrice: 24,
+    basePrice: 45,
     steps: [
       { key: 'format', opts: [
-        { id: 'a5',     label: 'DIN A5',       sub: '148 × 210 mm', p: 0  },
-        { id: 'a4',     label: 'DIN A4',       sub: '210 × 297 mm', p: 8  },
-        { id: 'a4quer', label: 'A4 Querformat',sub: '297 × 210 mm', p: 8  },
-        { id: 'custom', label: 'Sonderformat', sub: 'Nach Wunsch',  p: 15 },
+        { id: 'a5',     label: 'DIN A5',        sub: '148 × 210 mm', p: 0  },
+        { id: 'a4',     label: 'DIN A4',        sub: '210 × 297 mm', p: 12 },
+        { id: 'a4quer', label: 'A4 Querformat', sub: '297 × 210 mm', p: 12 },
+        { id: 'custom', label: 'Sonderformat',  sub: 'Nach Wunsch',  p: 22 },
       ]},
       { key: 'qty', opts: [
         { id: '10',  label: '10 Stk.',  sub: '', p: 0   },
-        { id: '25',  label: '25 Stk.',  sub: '', p: 38  },
-        { id: '50',  label: '50 Stk.',  sub: '', p: 65  },
-        { id: '100', label: '100 Stk.', sub: '', p: 110 },
+        { id: '25',  label: '25 Stk.',  sub: '', p: 58  },
+        { id: '50',  label: '50 Stk.',  sub: '', p: 98  },
+        { id: '100', label: '100 Stk.', sub: '', p: 165 },
       ]},
       { key: 'material', opts: [
         { id: 'soft',  label: 'Softcover',  sub: 'Kostengünstig', p: 0  },
-        { id: 'hard',  label: 'Hardcover',  sub: 'Langlebig',     p: 18 },
-        { id: 'wipe',  label: 'Abwischbar', sub: 'Hygienisch',    p: 12 },
-        { id: 'leder', label: 'Lederoptik', sub: 'Premium',       p: 35 },
+        { id: 'hard',  label: 'Hardcover',  sub: 'Langlebig',     p: 28 },
+        { id: 'wipe',  label: 'Abwischbar', sub: 'Hygienisch',    p: 18 },
+        { id: 'leder', label: 'Lederoptik', sub: 'Premium',       p: 52 },
       ]},
     ],
   },
   {
-    id: 'untersetzer', cat: 'gastro',
-    image: '/products/untersetzer.png',
-    name: 'Untersetzer',
+    id: 'untersetzer', cat: 'gastro', image: '/products/untersetzer.png', name: 'Untersetzer',
     specs: ['90 × 90 mm Standard', '4-farbig bedruckt', 'Karton od. Kork', 'ab 250 Stück'],
-    basePrice: 19,
+    basePrice: 39,
     steps: [
       { key: 'format', opts: [
-        { id: 'rund', label: 'Rund Ø 95mm',      sub: 'Classic', p: 0 },
-        { id: 'quad', label: 'Quadrat 90×90mm',  sub: 'Modern',  p: 0 },
-        { id: 'rect', label: 'Rechteck 90×120mm',sub: 'Groß',    p: 3 },
+        { id: 'rund', label: 'Rund Ø 95mm',       sub: 'Classic', p: 0 },
+        { id: 'quad', label: 'Quadrat 90×90mm',   sub: 'Modern',  p: 0 },
+        { id: 'rect', label: 'Rechteck 90×120mm', sub: 'Groß',    p: 5 },
       ]},
       { key: 'qty', opts: [
         { id: '250',  label: '250 Stk.',   sub: '',           p: 0  },
-        { id: '500',  label: '500 Stk.',   sub: '',           p: 16 },
-        { id: '1000', label: '1.000 Stk.', sub: 'Bestseller', p: 28 },
-        { id: '2500', label: '2.500 Stk.', sub: 'Vorteil',    p: 55 },
+        { id: '500',  label: '500 Stk.',   sub: '',           p: 25 },
+        { id: '1000', label: '1.000 Stk.', sub: 'Bestseller', p: 42 },
+        { id: '2500', label: '2.500 Stk.', sub: 'Vorteil',    p: 82 },
       ]},
       { key: 'material', opts: [
-        { id: 'karton', label: 'Karton 2mm', sub: 'Standard',   p: 0 },
-        { id: 'kork',   label: 'Kork 3mm',   sub: 'Nachhaltig', p: 6 },
-        { id: 'filz',   label: 'Filz 3mm',   sub: 'Gemütlich',  p: 5 },
-        { id: 'gummi',  label: 'Gummi',      sub: 'Rutschfest', p: 8 },
+        { id: 'karton', label: 'Karton 2mm', sub: 'Standard',   p: 0  },
+        { id: 'kork',   label: 'Kork 3mm',   sub: 'Nachhaltig', p: 9  },
+        { id: 'filz',   label: 'Filz 3mm',   sub: 'Gemütlich',  p: 8  },
+        { id: 'gummi',  label: 'Gummi',      sub: 'Rutschfest', p: 12 },
       ]},
     ],
   },
@@ -636,46 +591,33 @@ export default function ShopClient() {
 
   return (
     <>
-      {/* ── Category filter ───────────────────────────────────────────── */}
+      {/* Category filter */}
       <div className="flex gap-2 flex-wrap mb-8">
         {CATS.map(cat => (
-          <button
-            key={cat.id}
-            onClick={() => setFilter(cat.id)}
+          <button key={cat.id} onClick={() => setFilter(cat.id)}
             className={`px-4 py-2 text-xs font-bold uppercase tracking-widest rounded-sm border transition-colors ${
               filter === cat.id
                 ? 'border-accent bg-accent/10 text-accent'
                 : 'border-border text-muted hover:border-white/40 hover:text-white'
-            }`}
-          >
+            }`}>
             {cat.label}
           </button>
         ))}
       </div>
 
-      {/* ── Product grid ──────────────────────────────────────────────── */}
+      {/* Product grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-16">
         {filtered.map(prod => (
-          <div
-            key={prod.id}
-            onClick={() => openProduct(prod)}
-            className="bg-surface border border-border rounded-sm overflow-hidden cursor-pointer hover:border-accent/50 transition-all duration-300 group flex flex-col"
-          >
-            {/* Product image */}
+          <div key={prod.id} onClick={() => openProduct(prod)}
+            className="bg-surface border border-border rounded-sm overflow-hidden cursor-pointer hover:border-accent/50 transition-all duration-300 group flex flex-col">
             <div className="relative w-full h-48 overflow-hidden bg-surface-2">
-              <img
-                src={prod.image}
-                alt={prod.name}
-                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                loading="lazy"
-              />
+              <img src={prod.image} alt={prod.name}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
               <div className="absolute bottom-3 left-3 text-[10px] font-bold uppercase tracking-widest text-white/80 bg-black/40 px-2 py-1 rounded-sm">
                 {catLabel(prod.cat)}
               </div>
             </div>
-
-            {/* Product info */}
             <div className="p-5 flex flex-col flex-1">
               <h3 className="text-lg font-black tracking-tight mb-3 group-hover:text-accent transition-colors">
                 {prod.name}
@@ -683,8 +625,7 @@ export default function ShopClient() {
               <ul className="flex-1 mb-4 space-y-1">
                 {prod.specs.map(s => (
                   <li key={s} className="text-xs text-muted flex gap-1.5">
-                    <span className="text-accent shrink-0">–</span>
-                    <span>{s}</span>
+                    <span className="text-accent shrink-0">–</span><span>{s}</span>
                   </li>
                 ))}
               </ul>
@@ -703,21 +644,15 @@ export default function ShopClient() {
         ))}
       </div>
 
-      {/* ── Configurator modal ────────────────────────────────────────── */}
+      {/* Configurator modal */}
       {activeProd && (
-        <div
-          className="fixed inset-0 bg-black/92 z-50 overflow-y-auto p-4 flex items-start justify-center"
-          onClick={e => { if (e.target === e.currentTarget) closeModal() }}
-        >
+        <div className="fixed inset-0 bg-black/92 z-50 overflow-y-auto p-4 flex items-start justify-center"
+          onClick={e => { if (e.target === e.currentTarget) closeModal() }}>
           <div className="w-full max-w-3xl bg-surface border border-border rounded-sm my-4">
 
-            {/* Header with product image */}
+            {/* Header */}
             <div className="relative h-36 overflow-hidden">
-              <img
-                src={activeProd.image}
-                alt={activeProd.name}
-                className="w-full h-full object-cover"
-              />
+              <img src={activeProd.image} alt={activeProd.name} className="w-full h-full object-cover" />
               <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-black/30 flex items-end p-6">
                 <div>
                   <h2 className="text-3xl font-black tracking-tight">{activeProd.name}</h2>
@@ -726,10 +661,8 @@ export default function ShopClient() {
                   </p>
                 </div>
               </div>
-              <button
-                onClick={closeModal}
-                className="absolute top-4 right-4 w-9 h-9 flex items-center justify-center bg-black/50 border border-white/20 text-white hover:bg-black/70 rounded-sm transition-colors"
-              >
+              <button onClick={closeModal}
+                className="absolute top-4 right-4 w-9 h-9 flex items-center justify-center bg-black/50 border border-white/20 text-white hover:bg-black/70 rounded-sm transition-colors">
                 <X size={16} />
               </button>
             </div>
@@ -737,12 +670,10 @@ export default function ShopClient() {
             {/* Step bar */}
             <div className="flex border-b border-border overflow-x-auto">
               {[...STEP_LABELS.slice(0, activeProd.steps.length), 'Anfrage'].map((label, i) => (
-                <div
-                  key={i}
+                <div key={i}
                   className={`flex-1 min-w-[72px] py-3 px-2 text-center text-[10px] font-bold uppercase tracking-wider border-r border-border last:border-r-0 relative ${
                     i === step ? 'text-accent' : i < step ? 'text-white/40' : 'text-muted'
-                  }`}
-                >
+                  }`}>
                   {i < step ? '✓ ' : ''}{label}
                   {i === step && <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent" />}
                 </div>
@@ -758,15 +689,11 @@ export default function ShopClient() {
                   </p>
                   <div className={`grid gap-2 ${optCols(activeProd.steps[step].opts.length)}`}>
                     {activeProd.steps[step].opts.map(opt => (
-                      <button
-                        key={opt.id}
+                      <button key={opt.id}
                         onClick={() => setSels(prev => ({ ...prev, [step]: opt.id }))}
                         className={`p-3 text-left border rounded-sm transition-all ${
-                          sels[step] === opt.id
-                            ? 'border-accent bg-accent/5'
-                            : 'border-border hover:border-white/30'
-                        }`}
-                      >
+                          sels[step] === opt.id ? 'border-accent bg-accent/5' : 'border-border hover:border-white/30'
+                        }`}>
                         <div className="text-sm font-bold">{opt.label}</div>
                         <div className={`text-xs mt-0.5 ${sels[step] === opt.id ? 'text-accent' : 'text-muted'}`}>
                           {opt.sub}{opt.p > 0 ? ` (+${fmtPrice(opt.p)})` : ''}
