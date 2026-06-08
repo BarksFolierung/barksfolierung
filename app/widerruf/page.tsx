@@ -34,8 +34,8 @@ export default function WiderrufPage() {
               25482 Appen<br />
               Deutschland<br />
               E-Mail:{' '}
-              <a href="mailto:barkssinfo@gmail.com" className="hover:text-white transition-colors">
-                barkssinfo@gmail.com
+              <a href="mailto:info@barksfolierung.de" className="hover:text-white transition-colors">
+                info@barksfolierung.de
               </a>
             </p>
           </div>

@@ -74,8 +74,8 @@ export default function Footer() {
             <address className="not-italic text-sm text-muted space-y-2 leading-relaxed">
               <p>Appener Str. 34<br />25482 Appen</p>
               <p className="pt-1">
-                <a href="mailto:barkssinfo@gmail.com" className="hover:text-white transition-colors">
-                  barkssinfo@gmail.com
+                <a href="mailto:info@barksfolierung.de" className="hover:text-white transition-colors">
+                  info@barksfolierung.de
                 </a>
               </p>
               <p>

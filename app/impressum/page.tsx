@@ -33,8 +33,8 @@ export default function ImpressumPage() {
             </a>
             <br />
             E-Mail:{' '}
-            <a href="mailto:barkssinfo@gmail.com" className="hover:text-white transition-colors">
-              barkssinfo@gmail.com
+            <a href="mailto:info@barksfolierung.de" className="hover:text-white transition-colors">
+              info@barksfolierung.de
             </a>
           </p>
         </div>

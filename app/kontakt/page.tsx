@@ -23,8 +23,8 @@ const contactInfo: { icon: LucideIcon; label: string; value: string; href?: stri
   {
     icon: Mail,
     label: 'E-Mail',
-    value: 'barkssinfo@gmail.com',
-    href: 'mailto:barkssinfo@gmail.com',
+    value: 'info@barksfolierung.de',
+    href: 'mailto:info@barksfolierung.de',
   },
   {
     icon: Globe,

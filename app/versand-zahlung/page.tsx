@@ -77,8 +77,8 @@ export default function VersandZahlungPage() {
           </div>
           <p className="mt-3">
             Bitte vereinbaren Sie einen Termin vorab per E-Mail an{' '}
-            <a href="mailto:barkssinfo@gmail.com" className="hover:text-white transition-colors">
-              barkssinfo@gmail.com
+            <a href="mailto:info@barksfolierung.de" className="hover:text-white transition-colors">
+              info@barksfolierung.de
             </a>{' '}
             oder telefonisch unter{' '}
             <a href="tel:+491722868584" className="hover:text-white transition-colors">
