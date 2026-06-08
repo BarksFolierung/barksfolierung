@@ -29,7 +29,7 @@ const PRODUCTS: Product[] = [
   {
     id: 'flyer', cat: 'print', image: '/products/flyer.png', name: 'Flyer',
     specs: ['DIN A6 bis DIN A4', 'Offset- & Digitaldruck', '135g – 350g Papier', 'ab 100 Stück'],
-    basePrice: 49,
+    basePrice: 62,
     steps: [
       { key: 'format', opts: [
         { id: 'a6',   label: 'DIN A6',   sub: '105 × 148 mm', p: 0  },
@@ -57,7 +57,7 @@ const PRODUCTS: Product[] = [
   {
     id: 'visitenkarten', cat: 'print', image: '/products/visitenkarten.png', name: 'Visitenkarten',
     specs: ['85 × 55 mm · Portrait mögl.', 'Ein- oder beidseitig', '300g – 600g Karton', 'ab 100 Stück'],
-    basePrice: 25,
+    basePrice: 59,
     steps: [
       { key: 'format', opts: [
         { id: 'quer', label: 'Querformat',  sub: '85 × 55 mm', p: 0 },
