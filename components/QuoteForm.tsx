@@ -4,6 +4,26 @@ import { useState } from 'react'
 
 export default function QuoteForm() {
   const [done, setDone] = useState(false)
+  const [sending, setSending] = useState(false)
+  const [error, setError] = useState(false)
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    setSending(true)
+    setError(false)
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        body: new FormData(e.currentTarget),
+      })
+      if (!res.ok) throw new Error('send failed')
+      setDone(true)
+    } catch {
+      setError(true)
+    } finally {
+      setSending(false)
+    }
+  }
 
   if (done) {
     return (
@@ -18,26 +38,26 @@ export default function QuoteForm() {
   }
 
   return (
-    <form onSubmit={e => { e.preventDefault(); setDone(true) }} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
           <label className="block text-[10px] uppercase tracking-widest text-muted mb-1.5">Name *</label>
-          <input required type="text" placeholder="Max Mustermann"
+          <input required name="name" type="text" placeholder="Max Mustermann"
             className="w-full bg-surface border border-border rounded-sm px-4 py-3 text-sm placeholder:text-muted/40 focus:outline-none focus:border-accent transition-colors" />
         </div>
         <div>
           <label className="block text-[10px] uppercase tracking-widest text-muted mb-1.5">E-Mail *</label>
-          <input required type="email" placeholder="mail@example.com"
+          <input required name="email" type="email" placeholder="mail@example.com"
             className="w-full bg-surface border border-border rounded-sm px-4 py-3 text-sm placeholder:text-muted/40 focus:outline-none focus:border-accent transition-colors" />
         </div>
         <div>
           <label className="block text-[10px] uppercase tracking-widest text-muted mb-1.5">Telefon / WhatsApp</label>
-          <input type="tel" placeholder="+49 ..."
+          <input name="phone" type="tel" placeholder="+49 ..."
             className="w-full bg-surface border border-border rounded-sm px-4 py-3 text-sm placeholder:text-muted/40 focus:outline-none focus:border-accent transition-colors" />
         </div>
         <div>
           <label className="block text-[10px] uppercase tracking-widest text-muted mb-1.5">Leistung</label>
-          <select className="w-full bg-surface border border-border rounded-sm px-4 py-3 text-sm text-muted focus:outline-none focus:border-accent transition-colors">
+          <select name="service" className="w-full bg-surface border border-border rounded-sm px-4 py-3 text-sm text-muted focus:outline-none focus:border-accent transition-colors">
             <option value="">Bitte wählen</option>
             <option>Fahrzeugfolierung</option>
             <option>Autobeschriftung</option>
@@ -54,12 +74,18 @@ export default function QuoteForm() {
       </div>
       <div>
         <label className="block text-[10px] uppercase tracking-widest text-muted mb-1.5">Nachricht *</label>
-        <textarea required rows={5} placeholder="Beschreiben Sie kurz Ihr Projekt..."
+        <textarea required name="message" rows={5} placeholder="Beschreiben Sie kurz Ihr Projekt..."
           className="w-full bg-surface border border-border rounded-sm px-4 py-3 text-sm placeholder:text-muted/40 focus:outline-none focus:border-accent transition-colors resize-y" />
       </div>
-      <button type="submit"
-        className="w-full py-4 bg-accent hover:bg-accent-hover text-white font-black text-sm uppercase tracking-widest rounded-sm transition-colors">
-        Anfrage senden →
+      {error && (
+        <p className="text-sm text-red-500">
+          Leider konnte die Anfrage nicht gesendet werden. Bitte versuchen Sie es erneut oder schreiben Sie uns direkt an{' '}
+          <a href="mailto:info@barksfolierung.de" className="underline">info@barksfolierung.de</a>.
+        </p>
+      )}
+      <button type="submit" disabled={sending}
+        className="w-full py-4 bg-accent hover:bg-accent-hover text-white font-black text-sm uppercase tracking-widest rounded-sm transition-colors disabled:opacity-60 disabled:cursor-not-allowed">
+        {sending ? 'Wird gesendet…' : 'Anfrage senden →'}
       </button>
     </form>
   )

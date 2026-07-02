@@ -26,7 +26,7 @@ export async function POST(req: NextRequest) {
 
     await transporter.sendMail({
       from: `"BARKS Folierung Website" <${process.env.GMAIL_USER}>`,
-      to: process.env.GMAIL_USER,
+      to: 'barkssinfo@gmail.com',
       replyTo: email,
       subject: `Neue Anfrage: ${service} – ${name}`,
       html: `

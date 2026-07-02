@@ -571,6 +571,8 @@ export default function ShopClient() {
   const [step,       setStep]       = useState(0)
   const [sels,       setSels]       = useState<Record<number, string>>({})
   const [done,       setDone]       = useState(false)
+  const [sending,    setSending]    = useState(false)
+  const [error,      setError]      = useState(false)
 
   const filtered = filter === 'all' ? PRODUCTS : PRODUCTS.filter(p => p.cat === filter)
   const catLabel = (id: string) => CATS.find(c => c.id === id)?.label ?? id
@@ -580,7 +582,42 @@ export default function ShopClient() {
     setStep(0)
     setSels(Object.fromEntries(prod.steps.map((s, i) => [i, s.opts[0].id])))
     setDone(false)
+    setError(false)
     document.body.style.overflow = 'hidden'
+  }
+
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    if (!activeProd) return
+    setSending(true)
+    setError(false)
+
+    const f = new FormData(e.currentTarget)
+    const config = activeProd.steps
+      .map((s, i) => `${STEP_LABELS[i]}: ${s.opts.find(o => o.id === sels[i])?.label ?? '—'}`)
+      .join('\n')
+
+    const data = new FormData()
+    data.set('name',    f.get('name')?.toString()  ?? '')
+    data.set('email',   f.get('email')?.toString() ?? '')
+    data.set('phone',   f.get('phone')?.toString() ?? '')
+    data.set('service', `Shop: ${activeProd.name}`)
+    data.set('message',
+      `Produkt: ${activeProd.name}\n${config}\n\n` +
+      `Richtpreis netto: ${fmtPrice(price)}\n` +
+      `Brutto (inkl. 19% MwSt.): ${fmtBrutto(price)}\n\n` +
+      `Wunschtermin: ${f.get('deadline')?.toString() || '–'}\n\n` +
+      `Anmerkungen:\n${f.get('notes')?.toString() || '–'}`)
+
+    try {
+      const res = await fetch('/api/contact', { method: 'POST', body: data })
+      if (!res.ok) throw new Error('send failed')
+      setDone(true)
+    } catch {
+      setError(true)
+    } finally {
+      setSending(false)
+    }
   }
 
   function closeModal() {
@@ -752,36 +789,42 @@ export default function ShopClient() {
                       <span className="text-2xl font-black text-accent">{fmtBrutto(price)}</span>
                     </div>
                   </div>
-                  <form onSubmit={e => { e.preventDefault(); setDone(true) }} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <div>
                       <label className="block text-[10px] uppercase tracking-widest text-muted mb-1.5">Name *</label>
-                      <input required type="text" placeholder="Max Mustermann"
+                      <input required name="name" type="text" placeholder="Max Mustermann"
                         className="w-full bg-background border border-border rounded-sm px-3 py-2.5 text-sm placeholder:text-muted/40 focus:outline-none focus:border-accent transition-colors" />
                     </div>
                     <div>
                       <label className="block text-[10px] uppercase tracking-widest text-muted mb-1.5">E-Mail *</label>
-                      <input required type="email" placeholder="mail@example.com"
+                      <input required name="email" type="email" placeholder="mail@example.com"
                         className="w-full bg-background border border-border rounded-sm px-3 py-2.5 text-sm placeholder:text-muted/40 focus:outline-none focus:border-accent transition-colors" />
                     </div>
                     <div>
                       <label className="block text-[10px] uppercase tracking-widest text-muted mb-1.5">Telefon / WhatsApp</label>
-                      <input type="tel" placeholder="+49 ..."
+                      <input name="phone" type="tel" placeholder="+49 ..."
                         className="w-full bg-background border border-border rounded-sm px-3 py-2.5 text-sm placeholder:text-muted/40 focus:outline-none focus:border-accent transition-colors" />
                     </div>
                     <div>
                       <label className="block text-[10px] uppercase tracking-widest text-muted mb-1.5">Wunschtermin</label>
-                      <input type="text" placeholder="z.B. bis 20. Juli"
+                      <input name="deadline" type="text" placeholder="z.B. bis 20. Juli"
                         className="w-full bg-background border border-border rounded-sm px-3 py-2.5 text-sm placeholder:text-muted/40 focus:outline-none focus:border-accent transition-colors" />
                     </div>
                     <div className="sm:col-span-2">
                       <label className="block text-[10px] uppercase tracking-widest text-muted mb-1.5">Anmerkungen</label>
-                      <textarea rows={3} placeholder="Besondere Wünsche, Logofarben, Dateiformat..."
+                      <textarea name="notes" rows={3} placeholder="Besondere Wünsche, Logofarben, Dateiformat..."
                         className="w-full bg-background border border-border rounded-sm px-3 py-2.5 text-sm placeholder:text-muted/40 focus:outline-none focus:border-accent transition-colors resize-y" />
                     </div>
+                    {error && (
+                      <p className="sm:col-span-2 text-sm text-red-500">
+                        Leider konnte die Anfrage nicht gesendet werden. Bitte versuchen Sie es erneut oder schreiben Sie uns direkt an{' '}
+                        <a href="mailto:info@barksfolierung.de" className="underline">info@barksfolierung.de</a>.
+                      </p>
+                    )}
                     <div className="sm:col-span-2">
-                      <button type="submit"
-                        className="w-full py-4 bg-accent hover:bg-accent-hover text-white font-black text-sm uppercase tracking-widest rounded-sm transition-colors">
-                        Angebot anfragen →
+                      <button type="submit" disabled={sending}
+                        className="w-full py-4 bg-accent hover:bg-accent-hover text-white font-black text-sm uppercase tracking-widest rounded-sm transition-colors disabled:opacity-60 disabled:cursor-not-allowed">
+                        {sending ? 'Wird gesendet…' : 'Angebot anfragen →'}
                       </button>
                     </div>
                   </form>
