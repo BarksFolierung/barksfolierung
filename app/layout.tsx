@@ -4,6 +4,7 @@ import './globals.css'
 import Header from '@/components/Header'
 import Footer from '@/components/Footer'
 import CookieBanner from '@/components/CookieBanner'
+import { CartProvider } from '@/lib/cart'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
@@ -42,10 +43,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="de" className={inter.variable}>
       <body className="font-sans bg-background text-white">
-        <Header />
-        <main>{children}</main>
-        <Footer />
-        <CookieBanner />
+        <CartProvider>
+          <Header />
+          <main>{children}</main>
+          <Footer />
+          <CookieBanner />
+        </CartProvider>
       </body>
     </html>
   )

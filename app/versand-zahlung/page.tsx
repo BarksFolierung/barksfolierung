@@ -16,10 +16,10 @@ export default function VersandZahlungPage() {
           <h2 className="text-xs font-bold uppercase tracking-widest text-white mb-3">Zahlungsarten</h2>
           <p>Wir bieten folgende Zahlungsmöglichkeiten an:</p>
           <ul className="mt-3 space-y-2 list-disc list-inside">
+            <li>Online-Zahlung im Shop (Kreditkarte, Klarna u. a. – Abwicklung über Stripe)</li>
             <li>Banküberweisung (Vorkasse)</li>
             <li>Barzahlung bei Abholung oder Montage vor Ort</li>
             <li>Rechnung (für Geschäftskunden nach Vereinbarung)</li>
-            <li>PayPal (auf Anfrage)</li>
           </ul>
           <p className="mt-3">
             Rechnungen sind innerhalb von 14 Tagen nach Rechnungsstellung ohne Abzug zu
@@ -46,8 +46,10 @@ export default function VersandZahlungPage() {
           <h2 className="text-xs font-bold uppercase tracking-widest text-white mb-3">Versand & Lieferung</h2>
           <p>
             Standardprodukte (z. B. Druckerzeugnisse, Aufkleber) werden per DHL, DPD oder UPS
-            versandt. Die Versandkosten richten sich nach Gewicht, Größe und Lieferort und werden
-            im Bestellprozess separat ausgewiesen.
+            versandt. Im Online-Shop gilt eine Versandkostenpauschale von 8,90 € netto
+            (10,59 € brutto) pro Bestellung; ab einem Warenwert von 150 € netto liefern wir
+            versandkostenfrei. Alternativ ist eine kostenlose Abholung an unserem Standort in
+            Appen möglich.
           </p>
           <p className="mt-2">
             Für individuelle Großaufträge (z. B. Fahrzeugfolierungen, Leuchtkasten, Wandfolien)

@@ -67,3 +67,40 @@ accent: '#E53935',  // Change this to your brand color
 
 The form uses **Netlify Forms** – it works automatically when deployed to Netlify.
 For local testing, submissions won't work until deployed.
+
+## Online-Shop (Kasse & Zahlung)
+
+Der Shop unterstützt zwei Zahlungswege:
+
+1. **Vorkasse / Überweisung** – funktioniert sofort, keine Einrichtung nötig.
+   Kunde bestellt, erhält Bestellbestätigung mit Bankdaten per E-Mail.
+2. **Online-Zahlung via Stripe** (Karte, Klarna u. a.) – benötigt einen Stripe-Account.
+
+### Umgebungsvariablen (in Netlify unter Site settings → Environment variables)
+
+| Variable | Beschreibung |
+|---|---|
+| `GMAIL_USER` | Gmail-Adresse für den Mailversand (bereits vorhanden) |
+| `GMAIL_APP_PASSWORD` | Gmail App-Passwort (bereits vorhanden) |
+| `STRIPE_SECRET_KEY` | Stripe Secret Key (`sk_live_...`) – aus dem Stripe-Dashboard |
+| `STRIPE_WEBHOOK_SECRET` | Signing Secret (`whsec_...`) des Webhooks (siehe unten) |
+| `SHOP_BANK_HOLDER` | Kontoinhaber für Vorkasse-Bestellungen |
+| `SHOP_BANK_IBAN` | IBAN für Vorkasse-Bestellungen |
+| `SHOP_BANK_BIC` | BIC (optional) |
+| `SHOP_BANK_NAME` | Bankname (optional) |
+| `NEXT_PUBLIC_SITE_URL` | z. B. `https://barksfolierung.de` (Fallback für Redirect-URLs) |
+
+### Stripe einrichten
+
+1. Account auf [stripe.com](https://stripe.com) erstellen und verifizieren
+2. Dashboard → Entwickler → API-Schlüssel → **Secret Key** kopieren → als `STRIPE_SECRET_KEY` in Netlify eintragen
+3. Dashboard → Entwickler → Webhooks → **Endpoint hinzufügen**:
+   - URL: `https://barksfolierung.de/api/stripe-webhook`
+   - Event: `checkout.session.completed`
+4. Das **Signing Secret** des Webhooks als `STRIPE_WEBHOOK_SECRET` in Netlify eintragen
+5. Neu deployen – fertig
+
+Ohne Stripe-Keys zeigt die Kasse bei Online-Zahlung einen Hinweis; Vorkasse funktioniert immer.
+
+Versandkosten & Freigrenze lassen sich in `lib/shop-products.ts` anpassen
+(`SHIPPING_NETTO`, `FREE_SHIPPING_NETTO`).

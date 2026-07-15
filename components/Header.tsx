@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { ShoppingCart } from 'lucide-react'
+import { useCart } from '@/lib/cart'
 
 const navLinks = [
   { href: '/', label: 'Start' },
@@ -16,6 +18,7 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const pathname = usePathname()
+  const { count } = useCart()
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 30)
@@ -59,7 +62,19 @@ export default function Header() {
             ))}
           </nav>
 
-          <div className="hidden md:flex items-center">
+          <div className="hidden md:flex items-center gap-4">
+            <Link
+              href="/warenkorb"
+              className="relative p-2 text-muted hover:text-white transition-colors"
+              aria-label="Warenkorb"
+            >
+              <ShoppingCart size={20} />
+              {count > 0 && (
+                <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center bg-accent text-white text-[10px] font-black rounded-full">
+                  {count}
+                </span>
+              )}
+            </Link>
             <Link
               href="/kontakt"
               className="px-5 py-2.5 bg-accent hover:bg-accent-hover text-white text-sm font-bold uppercase tracking-wider rounded-sm transition-colors"
@@ -68,9 +83,22 @@ export default function Header() {
             </Link>
           </div>
 
+          <div className="md:hidden flex items-center gap-1">
+          <Link
+            href="/warenkorb"
+            className="relative p-2 text-white"
+            aria-label="Warenkorb"
+          >
+            <ShoppingCart size={20} />
+            {count > 0 && (
+              <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center bg-accent text-white text-[10px] font-black rounded-full">
+                {count}
+              </span>
+            )}
+          </Link>
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden p-2 text-white flex flex-col justify-center gap-1.5 w-8 h-8"
+            className="p-2 text-white flex flex-col justify-center gap-1.5 w-8 h-8"
             aria-label="Menü öffnen"
             aria-expanded={menuOpen}
           >
@@ -90,6 +118,7 @@ export default function Header() {
               }`}
             />
           </button>
+          </div>
         </div>
       </div>
 
