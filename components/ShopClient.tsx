@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { X, ChevronRight, ChevronLeft, ShoppingCart } from 'lucide-react'
 import {
@@ -24,6 +24,14 @@ export default function ShopClient() {
 
   const filtered = filter === 'all' ? PRODUCTS : PRODUCTS.filter(p => p.cat === filter)
   const catLabel = (id: string) => CATS.find(c => c.id === id)?.label ?? id
+
+  // Deep-Link: /shop?produkt=<id> öffnet den Konfigurator direkt (z. B. aus dem Portfolio)
+  useEffect(() => {
+    const id = new URLSearchParams(window.location.search).get('produkt')
+    const prod = id ? PRODUCTS.find(p => p.id === id) : null
+    if (prod) openProduct(prod)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   function openProduct(prod: Product) {
     setActiveProd(prod)
@@ -139,10 +147,10 @@ export default function ShopClient() {
               </ul>
               <div className="flex items-end justify-between">
                 <div>
-                  <div className="text-[10px] uppercase tracking-widest text-muted">ab (netto)</div>
-                  <div className="text-2xl font-black">{fmtPrice(prod.basePrice)}</div>
+                  <div className="text-[10px] uppercase tracking-widest text-muted">ab</div>
+                  <div className="text-2xl font-black">{fmtBrutto(prod.basePrice)}</div>
                   <div className="text-[10px] text-white/60">
-                    inkl. 19% MwSt. <span className="text-white font-bold">{fmtBrutto(prod.basePrice)}</span>
+                    inkl. 19% MwSt. · netto {fmtPrice(prod.basePrice)}
                   </div>
                 </div>
                 <span className="text-xs font-bold uppercase tracking-wider text-accent opacity-0 group-hover:opacity-100 transition-opacity">

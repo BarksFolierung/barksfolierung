@@ -76,8 +76,9 @@ export default function ShopCarousel() {
               </div>
               <div className="p-3">
                 <div className="text-sm font-bold leading-tight mb-1">{item.name}</div>
-                <div className="text-[10px] uppercase tracking-widest text-muted">ab (netto)</div>
-                <div className="text-lg font-black text-accent">{item.price} €</div>
+                <div className="text-[10px] uppercase tracking-widest text-muted">ab</div>
+                <div className="text-lg font-black text-accent">{Math.round(item.price * 1.19)} €</div>
+                <div className="text-[10px] text-muted">inkl. 19% MwSt.</div>
               </div>
             </Link>
           ))}

@@ -37,9 +37,38 @@ export default function AgbPage() {
         </div>
 
         <div>
+          <h2 className="text-xs font-bold uppercase tracking-widest text-white mb-3">§ 2a Vertragsschluss im Online-Shop</h2>
+          <p>
+            Die Darstellung der Produkte im Online-Shop stellt kein rechtlich bindendes Angebot,
+            sondern eine Aufforderung zur Bestellung dar. Durch Anklicken des Buttons
+            „Zahlungspflichtig bestellen" geben Sie eine verbindliche Bestellung der im
+            Warenkorb enthaltenen Waren ab.
+          </p>
+          <p className="mt-2">
+            Der Vertrag kommt zustande, wenn wir Ihre Bestellung durch eine Bestellbestätigung
+            per E-Mail annehmen. Bei Wahl der Online-Zahlung kommt der Vertrag spätestens mit
+            erfolgreicher Zahlungsabwicklung zustande.
+          </p>
+          <p className="mt-2">
+            Vor Absenden der Bestellung können Sie Ihre Eingaben jederzeit überprüfen und über
+            die Warenkorb-Ansicht korrigieren oder Artikel entfernen. Der Vertragstext wird von
+            uns gespeichert; Sie erhalten die Bestelldaten mit der Bestellbestätigung per
+            E-Mail. Vertragssprache ist Deutsch.
+          </p>
+          <p className="mt-2">
+            Als Zahlungsarten stehen die Online-Zahlung (Kreditkarte, Klarna u. a. über den
+            Zahlungsdienstleister Stripe) sowie Vorkasse per Banküberweisung zur Verfügung. Bei
+            Vorkasse beginnt die Produktion nach Zahlungseingang.
+          </p>
+        </div>
+
+        <div>
           <h2 className="text-xs font-bold uppercase tracking-widest text-white mb-3">§ 3 Preise und Zahlung</h2>
           <p>
-            Alle Preise verstehen sich zuzüglich der gesetzlichen Umsatzsteuer. Rechnungen sind
+            Im Online-Shop angegebene Preise sind Endpreise und enthalten die gesetzliche
+            Umsatzsteuer; zuzüglich anfallender Versandkosten, die im Bestellprozess ausgewiesen
+            werden. Preise in individuellen Angeboten für Geschäftskunden verstehen sich
+            zuzüglich der gesetzlichen Umsatzsteuer. Rechnungen sind
             innerhalb von 14 Tagen nach Rechnungsstellung ohne Abzug zu begleichen, sofern nicht
             anders vereinbart.
           </p>
@@ -124,7 +153,16 @@ export default function AgbPage() {
         </div>
 
         <div>
-          <h2 className="text-xs font-bold uppercase tracking-widest text-white mb-3">§ 10 Schlussbestimmungen</h2>
+          <h2 className="text-xs font-bold uppercase tracking-widest text-white mb-3">§ 10 Verbraucherstreitbeilegung</h2>
+          <p>
+            Wir sind nicht bereit und nicht verpflichtet, an Streitbeilegungsverfahren vor einer
+            Verbraucherschlichtungsstelle im Sinne des Verbraucherstreitbeilegungsgesetzes
+            (VSBG) teilzunehmen.
+          </p>
+        </div>
+
+        <div>
+          <h2 className="text-xs font-bold uppercase tracking-widest text-white mb-3">§ 11 Schlussbestimmungen</h2>
           <p>
             Es gilt das Recht der Bundesrepublik Deutschland. Gerichtsstand ist, soweit gesetzlich
             zulässig, der Sitz des Auftragnehmers. Sollten einzelne Bestimmungen dieser AGB
@@ -133,7 +171,7 @@ export default function AgbPage() {
         </div>
 
         <p className="text-xs text-muted/60 pt-4 border-t border-border">
-          Stand: Mai 2026 · Barks Folierung, Inhaber Labinot Danez, Appener Str. 34, 25482 Appen
+          Stand: Juli 2026 · Barks Folierung, Inhaber Labinot Danez, Appener Str. 34, 25482 Appen
         </p>
       </section>
     </div>

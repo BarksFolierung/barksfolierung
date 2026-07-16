@@ -19,6 +19,17 @@ export const categories = [
   'Innenraumgestaltung',
 ]
 
+// Verknüpft Portfolio-Kategorien mit dem passenden Shop-Produkt (Konfigurator-Deep-Link).
+// null = kein passendes Shop-Produkt → CTA führt zum Kontaktformular (individuelles Angebot).
+export const categoryShopProduct: Record<string, string | null> = {
+  Fahrzeugfolierung: 'autobeschriftung',
+  Beschriftung: 'fensterbeschriftung',
+  Fensterfolierung: 'fensterfolie',
+  Digitaldruck: 'aufkleber',
+  Leuchtreklame: null,
+  Innenraumgestaltung: null,
+}
+
 export const portfolioItems: PortfolioItem[] = [
   {
     id: '1',

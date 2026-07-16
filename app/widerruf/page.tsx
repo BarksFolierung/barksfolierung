@@ -101,8 +101,39 @@ export default function WiderrufPage() {
           </p>
         </div>
 
+        <div>
+          <h2 className="text-xs font-bold uppercase tracking-widest text-white mb-3">Muster-Widerrufsformular</h2>
+          <p>
+            Wenn Sie den Vertrag widerrufen wollen, können Sie das folgende Formular ausfüllen
+            und an uns zurücksenden (die Verwendung ist nicht verpflichtend – eine formlose
+            E-Mail genügt ebenfalls):
+          </p>
+          <div className="mt-4 p-5 bg-surface border border-border rounded-sm space-y-3">
+            <p>
+              An:<br />
+              Barks Folierung, Inhaber Labinot Danez<br />
+              Appener Str. 34, 25482 Appen, Deutschland<br />
+              E-Mail: info@barksfolierung.de
+            </p>
+            <p>
+              Hiermit widerrufe(n) ich/wir (*) den von mir/uns (*) abgeschlossenen Vertrag über
+              den Kauf der folgenden Waren (*) / die Erbringung der folgenden Dienstleistung (*):
+            </p>
+            <p>_______________________________________________</p>
+            <p>Bestellt am (*) / erhalten am (*): _______________________</p>
+            <p>Name des/der Verbraucher(s): _______________________</p>
+            <p>Anschrift des/der Verbraucher(s): _______________________</p>
+            <p>
+              Unterschrift des/der Verbraucher(s) (nur bei Mitteilung auf Papier):
+              _______________________
+            </p>
+            <p>Datum: _______________________</p>
+            <p className="text-xs text-muted/60">(*) Unzutreffendes streichen.</p>
+          </div>
+        </div>
+
         <p className="text-xs text-muted/60 pt-4 border-t border-border">
-          Stand: Mai 2026 · Barks Folierung, Inhaber Labinot Danez, Appener Str. 34, 25482 Appen
+          Stand: Juli 2026 · Barks Folierung, Inhaber Labinot Danez, Appener Str. 34, 25482 Appen
         </p>
       </section>
     </div>

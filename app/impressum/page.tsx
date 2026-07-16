@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Impressum',
-  description: 'Impressum der BARKS Folierung – Angaben gemäß § 5 TMG.',
+  description: 'Impressum der BARKS Folierung – Angaben gemäß § 5 DDG.',
 }
 
 export default function ImpressumPage() {
@@ -13,7 +13,7 @@ export default function ImpressumPage() {
       <section className="space-y-8 text-sm text-muted leading-relaxed">
         <div>
           <h2 className="text-xs font-bold uppercase tracking-widest text-white mb-3">
-            Angaben gemäß § 5 TMG
+            Angaben gemäß § 5 DDG
           </h2>
           <p>
             <strong className="text-white">Barks Folierung</strong><br />
@@ -51,7 +51,7 @@ export default function ImpressumPage() {
 
         <div>
           <h2 className="text-xs font-bold uppercase tracking-widest text-white mb-3">
-            Verantwortlich für den Inhalt nach § 55 Abs. 2 RStV
+            Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV
           </h2>
           <p>
             Labinot Danez<br />

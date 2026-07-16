@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
 import { buildOrder, type CheckoutPayload } from '@/lib/order'
 import { generateOrderNo } from '@/lib/mail'
-import { fmtEur } from '@/lib/shop-products'
+import { fmtEur, getProduct } from '@/lib/shop-products'
 
 // Erstellt eine Stripe-Checkout-Session und gibt die Payment-URL zurück.
 // Die Bestell-E-Mails werden erst nach erfolgreicher Zahlung vom Webhook versendet.
@@ -34,17 +34,22 @@ export async function POST(req: NextRequest) {
       'https://barksfolierung.de'
 
     // Positionen als Brutto-Beträge (inkl. 19% MwSt.) in Cent
-    const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = order.items.map(it => ({
-      quantity: 1,
-      price_data: {
-        currency: 'eur',
-        unit_amount: Math.round(it.netto * 1.19 * 100),
-        product_data: {
-          name: it.name,
-          description: it.config.join(' · ').slice(0, 500),
+    const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = order.items.map((it, i) => {
+      const product = getProduct(payload.items[i].productId)
+      return {
+        quantity: 1,
+        price_data: {
+          currency: 'eur',
+          unit_amount: Math.round(it.netto * 1.19 * 100),
+          product_data: {
+            name: it.name,
+            description: it.config.join(' · ').slice(0, 500),
+            // Produktfoto neben der Position auf der Stripe-Checkout-Seite
+            images: product ? [`${origin}${product.image}`] : undefined,
+          },
         },
-      },
-    }))
+      }
+    })
 
     if (order.shippingNetto > 0) {
       lineItems.push({

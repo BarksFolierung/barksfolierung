@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { ShoppingCart } from 'lucide-react'
+import { ShoppingCart, Instagram } from 'lucide-react'
 import { useCart } from '@/lib/cart'
 
 const navLinks = [
@@ -63,6 +63,15 @@ export default function Header() {
           </nav>
 
           <div className="hidden md:flex items-center gap-4">
+            <a
+              href="https://www.instagram.com/barksfolierung"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="p-2 text-muted hover:text-white transition-colors"
+              aria-label="Instagram"
+            >
+              <Instagram size={19} />
+            </a>
             <Link
               href="/warenkorb"
               className="relative p-2 text-muted hover:text-white transition-colors"

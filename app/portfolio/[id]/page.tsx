@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useState } from 'react'
-import { portfolioItems } from '@/data/portfolio'
+import { portfolioItems, categoryShopProduct } from '@/data/portfolio'
 
 export default function ProjectPage({ params }: { params: { id: string } }) {
   const item = portfolioItems.find((p) => p.id === params.id)
@@ -88,12 +88,31 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
             </div>
           )}
 
-          <Link
-            href="/kontakt"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-accent hover:bg-accent-hover text-white font-bold text-sm uppercase tracking-widest rounded-sm transition-colors self-start"
-          >
-            Ähnliches Projekt anfragen
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-3">
+            {categoryShopProduct[item.category] ? (
+              <>
+                <Link
+                  href={`/shop?produkt=${categoryShopProduct[item.category]}`}
+                  className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-accent hover:bg-accent-hover text-white font-bold text-sm uppercase tracking-widest rounded-sm transition-colors"
+                >
+                  Sowas bestellen →
+                </Link>
+                <Link
+                  href="/kontakt"
+                  className="inline-flex items-center justify-center gap-2 px-8 py-4 border border-border text-muted hover:text-white hover:border-white/40 font-bold text-sm uppercase tracking-widest rounded-sm transition-colors"
+                >
+                  Individuell anfragen
+                </Link>
+              </>
+            ) : (
+              <Link
+                href="/kontakt"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-accent hover:bg-accent-hover text-white font-bold text-sm uppercase tracking-widest rounded-sm transition-colors"
+              >
+                Ähnliches Projekt anfragen
+              </Link>
+            )}
+          </div>
         </div>
       </div>
 
