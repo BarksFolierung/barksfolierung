@@ -1,16 +1,26 @@
 import Link from 'next/link'
 import Hero from '@/components/Hero'
-import ShopCarousel from '@/components/ShopCarousel'
 import ServicesSection from '@/components/ServicesSection'
 import PortfolioGrid from '@/components/PortfolioGrid'
 import PriceCalculator from '@/components/PriceCalculator'
+import ShopClient from '@/components/ShopClient'
 
 export default function HomePage() {
   return (
     <>
       <Hero />
 
-      <ShopCarousel />
+      {/* Kompletter Shop direkt auf der Startseite – zweiter Scroll */}
+      <section className="py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mb-12 text-center">
+          <p className="text-xs font-bold uppercase tracking-widest text-accent mb-4">Online-Shop</p>
+          <h2 className="text-4xl sm:text-5xl font-black tracking-tight">Alle Produkte direkt bestellen</h2>
+          <p className="text-muted mt-4 max-w-xl mx-auto">
+            Produkt wählen, konfigurieren, bestellen – Druckdaten einfach beim Checkout hochladen.
+          </p>
+        </div>
+        <ShopClient />
+      </section>
 
       <ServicesSection />
 
