@@ -37,7 +37,11 @@ export type OrderInfo = {
   paid: boolean
   customer: OrderCustomer
   notes?: string
+  /** Anzahl der beim Checkout hochgeladenen Druckdateien (0 = keine). */
+  filesCount?: number
 }
+
+export type MailAttachment = { filename: string; content: Buffer }
 
 const DELIVERY_LABEL = { versand: 'Versand', abholung: 'Abholung in Appen' }
 const PAYMENT_LABEL  = { stripe: 'Online-Zahlung (Stripe)', vorkasse: 'Vorkasse / Überweisung' }
@@ -103,11 +107,17 @@ function customerBlockHtml(c: OrderCustomer): string {
 }
 
 /** E-Mail an den Shop-Betreiber. */
-export async function sendShopOrderMail(order: OrderInfo) {
+export async function sendShopOrderMail(order: OrderInfo, attachments: MailAttachment[] = []) {
   const transporter = createTransporter()
   const status = order.paid
     ? '✅ BEZAHLT (Stripe)'
     : order.payment === 'vorkasse' ? '⏳ Vorkasse – Zahlung ausstehend' : '⏳ Zahlung ausstehend'
+
+  const filesInfo = attachments.length > 0
+    ? `<p><strong>Druckdaten:</strong> ${attachments.length} Datei(en) im Anhang dieser E-Mail.</p>`
+    : order.filesCount && order.filesCount > 0
+      ? `<p><strong>Druckdaten:</strong> ${order.filesCount} Datei(en) wurden bereits per separater E-Mail „Druckdaten zu Bestellung ${order.orderNo}" zugestellt.</p>`
+      : `<p><strong>Druckdaten:</strong> Keine Dateien hochgeladen – Kunde wurde gebeten, sie per E-Mail nachzureichen.</p>`
 
   await transporter.sendMail({
     from: `"BARKS Folierung Shop" <${process.env.GMAIL_USER}>`,
@@ -126,10 +136,42 @@ export async function sendShopOrderMail(order: OrderInfo) {
         ${itemsTableHtml(order)}
         <h3>Kunde</h3>
         ${customerBlockHtml(order.customer)}
+        ${filesInfo}
         ${order.notes ? `<h3>Anmerkungen</h3><p style="background: #f5f5f5; padding: 12px; border-radius: 4px; white-space: pre-wrap;">${order.notes}</p>` : ''}
         <hr style="margin-top: 30px; border: none; border-top: 1px solid #e5e5e5;" />
         <p style="color: #aaa; font-size: 12px;">Bestellung über den Shop auf barksfolierung.de</p>
       </div>`,
+    attachments,
+  })
+}
+
+/**
+ * Separate Druckdaten-Mail an den Shop – wird beim Stripe-Checkout verschickt,
+ * da die Dateien nicht durch die Zahlungs-Weiterleitung transportiert werden können.
+ */
+export async function sendPrintDataMail(order: OrderInfo, attachments: MailAttachment[]) {
+  if (attachments.length === 0) return
+  const transporter = createTransporter()
+  await transporter.sendMail({
+    from: `"BARKS Folierung Shop" <${process.env.GMAIL_USER}>`,
+    to: SHOP_EMAIL,
+    replyTo: order.customer.email,
+    subject: `📎 Druckdaten zu Bestellung ${order.orderNo} – ${order.customer.name}`,
+    html: `
+      <div style="font-family: sans-serif; max-width: 620px; margin: 0 auto;">
+        <h2 style="border-bottom: 2px solid #e5e5e5; padding-bottom: 10px;">
+          Druckdaten zu Bestellung ${order.orderNo}
+        </h2>
+        <p>Der Kunde <strong>${order.customer.name}</strong> (${order.customer.email}) hat beim
+        Checkout ${attachments.length} Druckdatei(en) hochgeladen – siehe Anhang.</p>
+        <p>Die Online-Zahlung wurde soeben gestartet. Die Bestellbestätigung mit allen Details
+        folgt automatisch, sobald die Zahlung abgeschlossen ist. Sollte keine
+        Bestellbestätigung eintreffen, wurde die Zahlung abgebrochen – diese Druckdaten können
+        dann ignoriert werden.</p>
+        <hr style="margin-top: 30px; border: none; border-top: 1px solid #e5e5e5;" />
+        <p style="color: #aaa; font-size: 12px;">Bestellung über den Shop auf barksfolierung.de</p>
+      </div>`,
+    attachments,
   })
 }
 
@@ -165,9 +207,12 @@ export async function sendCustomerOrderMail(order: OrderInfo) {
         <p><strong>Lieferung:</strong> ${DELIVERY_LABEL[order.delivery]}</p>
         ${paymentBlock}
         <h3>Druckdaten</h3>
-        <p>Bitte senden Sie uns Ihre Druckdaten (PDF, AI/EPS oder PNG/TIFF ab 150 dpi) als Antwort
+        ${order.filesCount && order.filesCount > 0
+          ? `<p>Ihre ${order.filesCount} hochgeladene(n) Druckdatei(en) haben wir erhalten –
+        Sie müssen nichts weiter tun. Falls wir Rückfragen zu den Daten haben, melden wir uns.</p>`
+          : `<p>Bitte senden Sie uns Ihre Druckdaten (PDF, AI/EPS oder PNG/TIFF ab 150 dpi) als Antwort
         auf diese E-Mail – mit Angabe Ihrer Bestellnummer <strong>${order.orderNo}</strong>.
-        Sie haben keine fertigen Druckdaten? Kein Problem, wir unterstützen Sie gern beim Design.</p>
+        Sie haben keine fertigen Druckdaten? Kein Problem, wir unterstützen Sie gern beim Design.</p>`}
         <p>Bei Fragen erreichen Sie uns unter
         <a href="mailto:info@barksfolierung.de">info@barksfolierung.de</a> oder
         <a href="tel:+491722868584">+49 172 2868584</a>.</p>

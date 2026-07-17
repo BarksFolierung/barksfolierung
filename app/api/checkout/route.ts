@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server'
 import Stripe from 'stripe'
-import { buildOrder, type CheckoutPayload } from '@/lib/order'
-import { generateOrderNo } from '@/lib/mail'
+import { buildOrder } from '@/lib/order'
+import { generateOrderNo, sendPrintDataMail } from '@/lib/mail'
 import { fmtEur, getProduct } from '@/lib/shop-products'
+import { parseOrderForm, UploadError } from '@/lib/upload'
 
 // Erstellt eine Stripe-Checkout-Session und gibt die Payment-URL zurück.
 // Die Bestell-E-Mails werden erst nach erfolgreicher Zahlung vom Webhook versendet.
@@ -17,7 +18,7 @@ export async function POST(req: NextRequest) {
     }
     const stripe = new Stripe(secretKey)
 
-    const payload = (await req.json()) as CheckoutPayload
+    const { payload, attachments } = await parseOrderForm(req)
     if (payload.payment !== 'stripe') {
       return NextResponse.json({ success: false, error: 'invalid payment method' }, { status: 400 })
     }
@@ -76,6 +77,7 @@ export async function POST(req: NextRequest) {
       ort:      order.customer.ort,
       notes:    (order.notes ?? '').slice(0, 480),
       itemCount: String(payload.items.length),
+      fileCount: String(attachments.length),
     }
     payload.items.forEach((it, i) => {
       const sels = Object.keys(it.sels).sort().map(k => it.sels[Number(k)]).join(';')
@@ -88,12 +90,27 @@ export async function POST(req: NextRequest) {
       customer_email: order.customer.email,
       metadata,
       locale: 'de',
-      success_url: `${origin}/bestellung/danke?order=${orderNo}`,
+      success_url: `${origin}/bestellung/danke?order=${orderNo}&dateien=${attachments.length}`,
       cancel_url: `${origin}/warenkorb`,
     })
 
+    // Druckdaten sofort per Mail sichern – sie können nicht durch die
+    // Stripe-Weiterleitung transportiert werden. Die Bestellbestätigung
+    // folgt nach Zahlung über den Webhook (mit Verweis auf diese Mail).
+    if (attachments.length > 0) {
+      try {
+        await sendPrintDataMail(order, attachments)
+      } catch (err) {
+        console.error('Print data mail failed:', err)
+        // Zahlung nicht blockieren – Kunde wird ggf. um erneute Zusendung gebeten
+      }
+    }
+
     return NextResponse.json({ success: true, url: session.url, orderNo, total: fmtEur(order.brutto) })
   } catch (error) {
+    if (error instanceof UploadError) {
+      return NextResponse.json({ success: false, error: error.message }, { status: 400 })
+    }
     console.error('Checkout error:', error)
     return NextResponse.json({ success: false }, { status: 500 })
   }

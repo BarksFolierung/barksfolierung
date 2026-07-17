@@ -61,6 +61,7 @@ export async function POST(req: NextRequest) {
 
       const order = buildOrder(payload, m.orderNo ?? session.id, true)
       if (order) {
+        order.filesCount = parseInt(m.fileCount ?? '0', 10) || 0
         await sendShopOrderMail(order)
         await sendCustomerOrderMail(order)
       } else {

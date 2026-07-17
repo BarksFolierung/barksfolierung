@@ -1,9 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { Trash2, ShoppingCart, Lock } from 'lucide-react'
+import { Trash2, ShoppingCart, Lock, Upload, FileText, X } from 'lucide-react'
 import {
   getProduct, calcPrice, configLines, shippingNetto,
   fmtEur, VAT_RATE, FREE_SHIPPING_NETTO,
@@ -13,14 +13,51 @@ import { useCart } from '@/lib/cart'
 type Delivery = 'versand' | 'abholung'
 type Payment  = 'stripe' | 'vorkasse'
 
+// Muss zum Server-Limit in lib/upload.ts passen (Netlify-Body-Limit ~6 MB)
+const MAX_FILES = 5
+const MAX_TOTAL_BYTES = 4 * 1024 * 1024
+const ACCEPT = '.pdf,.ai,.eps,.png,.tif,.tiff,.jpg,.jpeg,.svg,.zip'
+
+function fmtBytes(b: number): string {
+  return b < 1024 * 1024 ? `${Math.round(b / 1024)} KB` : `${(b / 1024 / 1024).toFixed(1)} MB`
+}
+
 export default function CartClient() {
   const { items, removeItem, subtotalNetto } = useCart()
   const router = useRouter()
 
   const [delivery, setDelivery] = useState<Delivery>('versand')
   const [payment,  setPayment]  = useState<Payment>('stripe')
+  const [files,    setFiles]    = useState<File[]>([])
+  const [fileErr,  setFileErr]  = useState<string | null>(null)
   const [sending,  setSending]  = useState(false)
   const [error,    setError]    = useState<string | null>(null)
+  const fileInputRef = useRef<HTMLInputElement>(null)
+
+  function addFiles(list: FileList | null) {
+    if (!list) return
+    setFileErr(null)
+    const next = [...files]
+    for (const f of Array.from(list)) {
+      if (next.some(x => x.name === f.name && x.size === f.size)) continue
+      next.push(f)
+    }
+    if (next.length > MAX_FILES) {
+      setFileErr(`Maximal ${MAX_FILES} Dateien möglich.`)
+      return
+    }
+    const total = next.reduce((s, f) => s + f.size, 0)
+    if (total > MAX_TOTAL_BYTES) {
+      setFileErr('Dateien zusammen zu groß (max. 4 MB). Größere Druckdaten senden Sie uns bitte nach der Bestellung per E-Mail – wir melden uns mit Ihrer Bestellnummer.')
+      return
+    }
+    setFiles(next)
+  }
+
+  function removeFile(idx: number) {
+    setFiles(files.filter((_, i) => i !== idx))
+    setFileErr(null)
+  }
 
   const shipNetto  = shippingNetto(subtotalNetto, delivery)
   const totalNetto = subtotalNetto + shipNetto
@@ -50,27 +87,24 @@ export default function CartClient() {
       notes: f.get('notes')?.toString() || undefined,
     }
 
+    // Payload + Druckdateien als multipart/form-data
+    const body = new FormData()
+    body.set('payload', JSON.stringify(payload))
+    files.forEach(file => body.append('files', file))
+
     try {
       if (payment === 'stripe') {
-        const res = await fetch('/api/checkout', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        })
+        const res = await fetch('/api/checkout', { method: 'POST', body })
         const data = await res.json()
         if (!res.ok || !data.url) {
           throw new Error(data.error || 'Checkout fehlgeschlagen')
         }
         window.location.href = data.url  // Weiterleitung zu Stripe
       } else {
-        const res = await fetch('/api/order', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        })
+        const res = await fetch('/api/order', { method: 'POST', body })
         const data = await res.json()
-        if (!res.ok || !data.success) throw new Error('Bestellung fehlgeschlagen')
-        router.push(`/bestellung/danke?order=${data.orderNo}&zahlung=vorkasse`)
+        if (!res.ok || !data.success) throw new Error(data.error || 'Bestellung fehlgeschlagen')
+        router.push(`/bestellung/danke?order=${data.orderNo}&zahlung=vorkasse&dateien=${files.length}`)
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.')
@@ -218,6 +252,50 @@ export default function CartClient() {
                   className={`${inputCls} resize-y`} />
               </div>
             </div>
+          </div>
+
+          {/* Druckdaten-Upload */}
+          <div>
+            <p className="text-xs font-bold uppercase tracking-widest text-accent mb-3">
+              Druckdaten hochladen <span className="text-muted normal-case font-normal">(optional)</span>
+            </p>
+            <input
+              ref={fileInputRef}
+              type="file"
+              multiple
+              accept={ACCEPT}
+              className="hidden"
+              onChange={e => { addFiles(e.target.files); e.target.value = '' }}
+            />
+            <button
+              type="button"
+              onClick={() => fileInputRef.current?.click()}
+              className="w-full p-4 border border-dashed border-border hover:border-accent/60 rounded-sm text-muted hover:text-white transition-colors flex items-center justify-center gap-2 text-sm"
+            >
+              <Upload size={15} />
+              Dateien auswählen (PDF, AI, EPS, PNG, JPG, ZIP · max. 4 MB gesamt)
+            </button>
+            {files.length > 0 && (
+              <ul className="mt-2 space-y-1.5">
+                {files.map((f, i) => (
+                  <li key={`${f.name}-${i}`}
+                    className="flex items-center gap-2 text-xs bg-background border border-border rounded-sm px-3 py-2">
+                    <FileText size={13} className="text-accent shrink-0" />
+                    <span className="flex-1 truncate">{f.name}</span>
+                    <span className="text-muted shrink-0">{fmtBytes(f.size)}</span>
+                    <button type="button" onClick={() => removeFile(i)} aria-label="Datei entfernen"
+                      className="p-0.5 text-muted hover:text-red-500 transition-colors shrink-0">
+                      <X size={13} />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {fileErr && <p className="mt-2 text-xs text-red-500">{fileErr}</p>}
+            <p className="mt-2 text-[10px] text-muted">
+              Keine Druckdaten zur Hand? Kein Problem – Sie können sie auch nach der Bestellung
+              per E-Mail senden oder wir gestalten für Sie.
+            </p>
           </div>
 
           {/* Summen */}

@@ -10,10 +10,11 @@ export const metadata: Metadata = {
 export default function DankePage({
   searchParams,
 }: {
-  searchParams: { order?: string; zahlung?: string }
+  searchParams: { order?: string; zahlung?: string; dateien?: string }
 }) {
-  const orderNo  = searchParams.order
-  const vorkasse = searchParams.zahlung === 'vorkasse'
+  const orderNo   = searchParams.order
+  const vorkasse  = searchParams.zahlung === 'vorkasse'
+  const filesSent = parseInt(searchParams.dateien ?? '0', 10) > 0
 
   return (
     <div className="pt-28 pb-24 max-w-2xl mx-auto px-4 sm:px-6 text-center">
@@ -37,12 +38,24 @@ export default function DankePage({
           : 'Ihre Zahlung war erfolgreich. Sie erhalten in Kürze eine Bestellbestätigung per E-Mail.'}
       </p>
       <div className="bg-surface border border-border rounded-sm p-6 text-left mb-10">
-        <p className="text-xs font-bold uppercase tracking-widest text-accent mb-3">Nächster Schritt: Druckdaten</p>
-        <p className="text-sm text-muted leading-relaxed">
-          Bitte senden Sie uns Ihre Druckdaten (PDF, AI/EPS oder PNG/TIFF ab 150 dpi) als Antwort auf die
-          Bestellbestätigung – mit Angabe Ihrer Bestellnummer. Sie haben keine fertigen Druckdaten?
-          Kein Problem, wir unterstützen Sie gern beim Design.
-        </p>
+        {filesSent ? (
+          <>
+            <p className="text-xs font-bold uppercase tracking-widest text-accent mb-3">Druckdaten erhalten ✓</p>
+            <p className="text-sm text-muted leading-relaxed">
+              Ihre hochgeladenen Druckdaten sind bei uns angekommen – Sie müssen nichts weiter tun.
+              Falls wir Rückfragen zu den Daten haben, melden wir uns bei Ihnen.
+            </p>
+          </>
+        ) : (
+          <>
+            <p className="text-xs font-bold uppercase tracking-widest text-accent mb-3">Nächster Schritt: Druckdaten</p>
+            <p className="text-sm text-muted leading-relaxed">
+              Bitte senden Sie uns Ihre Druckdaten (PDF, AI/EPS oder PNG/TIFF ab 150 dpi) als Antwort auf die
+              Bestellbestätigung – mit Angabe Ihrer Bestellnummer. Sie haben keine fertigen Druckdaten?
+              Kein Problem, wir unterstützen Sie gern beim Design.
+            </p>
+          </>
+        )}
       </div>
       <div className="flex flex-col sm:flex-row gap-3 justify-center">
         <Link href="/shop"
