@@ -33,6 +33,12 @@ export default function ShopClient() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
+  // Scroll-Sperre immer aufheben, wenn die Komponente verlassen wird
+  // (z. B. Navigation „Zur Kasse" direkt aus dem offenen Konfigurator)
+  useEffect(() => {
+    return () => { document.body.style.overflow = '' }
+  }, [])
+
   function openProduct(prod: Product) {
     setActiveProd(prod)
     setStep(0)
@@ -233,6 +239,7 @@ export default function ShopClient() {
                   </p>
                   <div className="flex flex-col sm:flex-row gap-3 justify-center">
                     <Link href="/warenkorb"
+                      onClick={() => { document.body.style.overflow = '' }}
                       className="px-8 py-4 bg-accent hover:bg-accent-hover text-white font-bold text-sm uppercase tracking-widest rounded-sm transition-colors">
                       Zur Kasse →
                     </Link>
